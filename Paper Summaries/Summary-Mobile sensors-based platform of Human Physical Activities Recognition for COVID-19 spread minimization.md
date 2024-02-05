@@ -1,4 +1,5 @@
-Mobile sensors-based platform of Human Physical Activities Recognition for COVID-19 spread minimization
+Title : Mobile sensors-based platform of Human Physical Activities Recognition for COVID-19 spread minimization
+
 
 The COVID-19 pandemic spurred the development of mobile health applications for managing and mitigating the virus's spread. Recognizing activities that contribute to transmission, like handshaking and face-touching, became crucial. This research paper discusses a novel approach leveraging smartphone sensors such as accelerometers, gyroscopes, and speed sensors to recognize human activities relevant to COVID-19 prevention. This paper builds upon existing activity recognition research, uniquely adapting it to the pandemic context. The study included the development of a mobile app, a specialized dataset, and integrated GPS-based contact tracing offering a comprehensive solution exceeding traditional activity recognition methods.
 
