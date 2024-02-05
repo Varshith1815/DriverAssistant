@@ -52,7 +52,7 @@ The paper dives into different health conditions, breaking them down into three 
 The review also discussed the limitations of collecting that data such as privacy, accuracy, and the standardization of the sensing. It also discusses the scope of utilizing the power of machine learning on the collected data which could aid in extracting meaningful insights. With the insights gained from the review, we could develop an app that gives insights into the overall health and well-being of an individual. This app could consider several sensors such as an accelerometer, gyroscope, and microphone to provide extra data related to the user’s physical activity, sleep quality, and noise levels, and even try to analyze the snoring patterns to generate meaningful insights and provide qualitative feedback to the users. We could also use facial recognition sensors to analyze the user's mental state and suggest necessary steps to reduce stress.
 
 # SHARING DATA COLLECTED WITH SMARTPHONE SENSORS
-## WILLINGNESS, PARTICIPATION, AND NONPARTICIPATION BIAS
+## WILLINGNESS, PARTICIPATION, AND NONPARTICIPATION BIAS 
 
 `-- Akshay Reddy Kola`
 
@@ -62,4 +62,14 @@ This study further delves into the ethical considerations and willingness of par
 
 This research not only brings attention to the potential obstacles and prejudices that can result from differing levels of participation among diverse demographic groups and sensor tasks, but also stresses the importance of developing tactics to reduce nonparticipation bias and guarantee inclusivity and accuracy in the gathered data. These noteworthy findings open doors for further investigation into more refined and ethical methods for utilizing smartphone sensor data in the realms of social and behavioral sciences, ultimately offering a deeper insight into human behavior through the lens of technology.
 
+
+
+# Mobile sensors-based platform of Human Physical Activities Recognition for COVID-19 spread minimization
+`-- Harsha Vardhan Mupparaju`
+
+The COVID-19 pandemic spurred the development of mobile health applications for managing and mitigating the virus's spread. Recognizing activities that contribute to transmission, like handshaking and face-touching, became crucial. This research paper discusses a novel approach leveraging smartphone sensors such as accelerometer, gyroscope, and speed sensors to recognize human activities relevant to COVID-19 prevention.  This paper builds upon existing activity recognition research, uniquely adapting it to the pandemic context. The study included development of a mobile app, a specialized dataset, and integrated GPS-based contact tracing offering a comprehensive solution exceeding traditional activity recognition methods.
+
+Core concepts discussed in this paper involve sensor data collection, feature extraction, and classification algorithms like LSTM, Random Forest, Decision Tree, KNN, and SVM. Researchers delve into these concepts to design an effective pandemic control system. While the study incorporates GPS data for contact tracing, it acknowledges limitations in indoor accuracy. This highlights a critical gap in indoor positioning, suggesting further research on integrating alternative technologies like Bluetooth and WiFi. Additionally, while various classification algorithms are tested, their comparative advantages and disadvantages require deeper exploration.
+
+Several questions emerge from this study. How can indoor positioning accuracy be improved for better contact tracing? What other sensors or technologies can complement GPS data? Is there a need for a hybrid system combining multiple sensors for more accurate activity recognition? How can the chosen classification algorithms be optimized for real-world pandemic control scenarios? The paper offers a comprehensive solution while identifying areas for future exploration. This underscores the evolving nature of the field and the continuous need for innovative approaches to public health challenges.
 
