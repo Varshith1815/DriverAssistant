@@ -25,6 +25,8 @@ For the speed alert feature, we can implement logic within the app to compare th
 ## Crash Detection and Driver Mode
 `--Varshith Sriram Mandalapu`
 
+Crash detection of vehicles using smartphone sensors can be predominantly achieved using two sensors: GPS and accelerometer. The GPS sensor provides us with the real-time location of the smartphone device, while the accelerometer sensor gives us any indication of sudden accelerations that have occurred on the device. We can also utilize a smartphone’s microphone sensor to detect any loud sounds that occur. React Native facilitates access to these sensors through its native modules. By leveraging GPS data, we can determine the speed of the smartphone, while the accelerometer helps in detecting falls. To minimize false positives, a combination of these two sensors can be employed. For instance, if a fall is detected, we can cross-check if there's a sudden decrease in the device's speed, indicating a possible crash. Moreover, implementing a time threshold allows for continuous monitoring of speeds, further reducing the occurrence of false alarms.
+
 ## Motion Sensors
 `--Harsha Vardhan Mupparaju`
 
