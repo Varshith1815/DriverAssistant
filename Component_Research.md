@@ -13,6 +13,7 @@ Gyroscopes aid in measuring angular velocity, aiding in assessing the vehicle's 
 Accelerometers enable the detection of sudden movements, such as those indicative of a crash.
 Gyroscopes contribute to identifying abrupt changes in orientation, further enhancing the responsiveness of the crash detection feature.
 
+To implement accelerometers and gyroscopes in a driving safety application, we integrate sensor data processing within the React frontend to capture real-time information from accelerometers and gyroscopes. We then utilize React components to visualize and interpret the data for users. In the backend, we can employ Java for server-side development to handle data storage, processing, and communication with external APIs or databases. 
 
 ## Speedometer Display and Alerts
 `--Akshay Reddy Kola`
