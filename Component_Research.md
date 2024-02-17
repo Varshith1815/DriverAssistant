@@ -30,6 +30,9 @@ For the speed alert feature, we can implement logic within the app to compare th
 ## Bluetooth Low Energy (BLE) Integration
 `--Gokul Subramanian`
 
+The integration of Bluetooth Low Energy (BLE) into the intelligent driver assistant app takes its functionality and connectivity to the next level. With BLE, the app can communicate with external devices like smart watches, expanding its capabilities beyond the phone's sensors. This integration allows the app to gather more contextual data, such as heart rate and location proximity, to offer personalized alerts and warnings for the driver.
+
+
 ## Addressing Data Privacy Concerns
 `--Hariraj Venkatesan`
 
