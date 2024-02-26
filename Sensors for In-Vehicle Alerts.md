@@ -1,4 +1,4 @@
-#Exploring Sensor Integration for In-Vehicle Alerts and Crash Detection
+# Exploring Sensor Integration for In-Vehicle Alerts and Crash Detection
 
 **1. Global Navigation Satellite System (GNSS):**
 
@@ -6,3 +6,11 @@
 * **Benefits:** Continuously tracks location and speed. Reliable and widely available technology.
 * **Considerations:** Requires access to clear skies for optimal signal reception.
 * **Reference:** K. Bengler, K. Dietmayer, B. Farber, M. Maurer, C. Stiller, and H. Winner, "Three Decades of Driver Assistance Systems: Review and Future Perspectives," IEEE Intelligent Transportation Systems Magazine, vol. 6, no. 4, pp. 6–22, Dec. 2014. [https://ieeexplore.ieee.org/document/6936444](https://ieeexplore.ieee.org/document/6936444)
+
+
+**2. Accelerometer:**
+
+* **Types of alerts:** Primarily used for detecting potential crashes through sudden changes in acceleration (deceleration in case of a collision).
+* **Benefits:** Can be used for crash detection in addition to speed monitoring.
+* **Considerations:** Not directly involved in speed monitoring unless combined with GNSS data.
+* **Reference:** J. Izquierdo-Reyes, R. A. Ramirez-Mendoza, and M. R. Bustamante-Bello, "A study of the effects of advanced driver assistance systems alerts on driver performance," International Journal on Interactive Design and Manufacturing (IJIDeM), vol. 12, no. 1, pp. 263–272, Jan. 2017. [https://www.sciencedirect.com/science/article/abs/pii/S0001457522001993](https://www.sciencedirect.com/science/article/abs/pii/S0001457522001993)
