@@ -14,3 +14,11 @@
 * **Benefits:** Can be used for crash detection in addition to speed monitoring.
 * **Considerations:** Not directly involved in speed monitoring unless combined with GNSS data.
 * **Reference:** J. Izquierdo-Reyes, R. A. Ramirez-Mendoza, and M. R. Bustamante-Bello, "A study of the effects of advanced driver assistance systems alerts on driver performance," International Journal on Interactive Design and Manufacturing (IJIDeM), vol. 12, no. 1, pp. 263–272, Jan. 2017. [https://www.sciencedirect.com/science/article/abs/pii/S0001457522001993](https://www.sciencedirect.com/science/article/abs/pii/S0001457522001993)
+
+
+**3. Gyroscope:**
+
+* **Types of alerts:** Can contribute to multimodal alerts by detecting sudden changes in the vehicle's orientation (e.g., sharp turns), which could be an indicator of potential risky driving behavior.
+* **Benefits:** Provides additional data for a more comprehensive understanding of vehicle behavior.
+* **Considerations:** Not directly involved in speed monitoring and requires additional processing for meaningful insights.
+* **Reference:** Abnormal driving behaviors detection and identification using smartphone sensors [https://ieeexplore.ieee.org/abstract/document/7338354] (https://ieeexplore.ieee.org/abstract/document/7338354)
