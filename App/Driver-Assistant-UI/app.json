@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "speedometer",
-    "slug": "speedometer",
+    "name": "Driver-Assistant-UI",
+    "slug": "Driver-Assistant-UI",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
