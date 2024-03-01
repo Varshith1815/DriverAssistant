@@ -3,7 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import * as Location from 'expo-location';
 
 const Speedometer = () => {
-  const [speed, setSpeed] = useState(0);
+  const [speedKmh, setSpeedKmh] = useState(0);
+  const [speedMph, setSpeedMph] = useState(0);
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
@@ -21,8 +22,10 @@ const Speedometer = () => {
           distanceInterval: 1, // Set distance interval to 1 meter for more responsive updates
         },
         (location) => {
-          const currentSpeed = location.coords.speed * 3.6; // Convert m/s to km/h
-          setSpeed(currentSpeed >= 0 ? currentSpeed : 0); // Sometimes speed might be negative
+          const currentSpeedKmh = location.coords.speed * 3.6; // Convert m/s to km/h
+          const currentSpeedMph = currentSpeedKmh / 1.60934; // Convert km/h to mph
+          setSpeedKmh(currentSpeedKmh >= 0 ? currentSpeedKmh : 0); // Sometimes speed might be negative
+          setSpeedMph(currentSpeedMph >= 0 ? currentSpeedMph : 0);
         }
       );
     })();
@@ -30,7 +33,8 @@ const Speedometer = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.speedText}>{errorMsg || `${speed.toFixed(1)} km/h`}</Text>
+      <Text style={styles.speedText}>{errorMsg || `${speedKmh.toFixed(1)} km/h`}</Text>
+      <Text style={styles.speedText}>{errorMsg || `${speedMph.toFixed(1)} miles/h`}</Text>
     </View>
   );
 };
