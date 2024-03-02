@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Switch } from 'react-native';
 import * as Location from 'expo-location';
+import { AntDesign } from '@expo/vector-icons'; // Ensure you have expo/vector-icons installed
 
 const Speedometer = () => {
   const [speedKmh, setSpeedKmh] = useState(0);
-  const [speedMph, setSpeedMph] = useState(0);
+  const [useMph, setUseMph] = useState(false); // State to toggle between km/h and mph
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
@@ -17,38 +18,52 @@ const Speedometer = () => {
 
       await Location.watchPositionAsync(
         {
-          accuracy: Location.Accuracy.BestForNavigation, // Use the best accuracy for navigation
-          timeInterval: 500, // Lower time interval to 500ms for more frequent updates
-          distanceInterval: 1, // Set distance interval to 1 meter for more responsive updates
+          accuracy: Location.Accuracy.BestForNavigation,
+          timeInterval: 500,
+          distanceInterval: 1,
         },
         (location) => {
-          const currentSpeedKmh = location.coords.speed * 3.6; // Convert m/s to km/h
-          const currentSpeedMph = currentSpeedKmh / 1.60934; // Convert km/h to mph
-          setSpeedKmh(currentSpeedKmh >= 0 ? currentSpeedKmh : 0); // Sometimes speed might be negative
-          setSpeedMph(currentSpeedMph >= 0 ? currentSpeedMph : 0);
+          const currentSpeedKmh = location.coords.speed * 3.6;
+          setSpeedKmh(currentSpeedKmh >= 0 ? currentSpeedKmh : 0);
         }
       );
     })();
   }, []);
 
+  const speed = useMph ? speedKmh / 1.60934 : speedKmh;
+  const speedText = speed.toFixed(1) + (useMph ? ' mph' : ' km/h');
+  const speedColor = speed < 30 ? '#30b455' : speed < 70 ? '#e3b23c' : '#d9534f';
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.speedText}>{errorMsg || `${speedKmh.toFixed(1)} km/h`}</Text>
-      <Text style={styles.speedText}>{errorMsg || `${speedMph.toFixed(1)} miles/h`}</Text>
+    <View style={[styles.container, { borderColor: speedColor }]}>
+      <AntDesign name={speed < 30 ? 'caretright' : 'rocket1'} size={48} color={speedColor} />
+      <Text style={[styles.speedText, { color: speedColor }]}>{errorMsg || speedText}</Text>
+      <Switch
+        trackColor={{ false: "#767577", true: "#81b0ff" }}
+        thumbColor={useMph ? "#f5dd4b" : "#f4f3f4"}
+        onValueChange={() => setUseMph(previousState => !previousState)}
+        value={useMph}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: '#121212',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 5,
+    height: 250,
+    width: 250,
+    borderRadius: 1000, // High value to ensure circular border
+    padding: 50, // Adjust based on your needs
   },
   speedText: {
-    color: '#FFFFFF',
+    marginTop: 10,
     fontSize: 24,
+    fontWeight: 'bold',
   },
 });
 
