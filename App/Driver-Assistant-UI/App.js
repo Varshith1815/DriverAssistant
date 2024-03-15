@@ -1,13 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/Home';
+import Login from './src/Login'
 
 const Stack = createStackNavigator();
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
 
   return (
     <NavigationContainer>
@@ -33,12 +38,3 @@ function App() {
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#121212',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
