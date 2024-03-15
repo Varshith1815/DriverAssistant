@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Button, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 
@@ -45,10 +45,14 @@ const Login = ({ onLogin }) => {
             {loading ? (
                 <ActivityIndicator size="large" color="#0000ff" />
             ) : (
-                <>
-                    <Button title="Login" onPress={signIn} />
-                    <Button title="Create account" onPress={signUp} />
-                </>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={signIn}>
+                        <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={signUp}>
+                        <Text style={styles.buttonText}>Create Account</Text>
+                    </TouchableOpacity>
+                </View>
             )}
           </KeyboardAvoidingView>
         </View>
@@ -59,7 +63,7 @@ export default Login;
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 20,
+        marginHorizontal: 40,
         flex: 1,
         justifyContent: 'center'
     },
@@ -67,8 +71,24 @@ const styles = StyleSheet.create({
         marginVertical: 4,
         height: 50,
         borderWidth: 1,
-        borderRadius: 4,
+        borderRadius: 14,
         padding: 10,
         backgroundColor: '#fff'
-    }
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    button: {
+        backgroundColor: '#007bff',
+        borderRadius: 14,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
 });
