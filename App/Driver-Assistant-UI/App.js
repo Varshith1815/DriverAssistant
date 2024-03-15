@@ -19,6 +19,12 @@ function App() {
             options={{ title: 'Home' }}
           />
         ) : (
+          <Stack.Screen
+            name="Login"
+            options={{ title: 'Login' }}
+          >
+            {(props) => <Login {...props} onLogin={handleLogin} />}
+          </Stack.Screen>
           
         )}
       </Stack.Navigator>
