@@ -1,4 +1,4 @@
-﻿**Technical Specifications Document**
+﻿**Technical Specifications**
 
 **Platform:** Intended both for iOS and android.
 
@@ -16,15 +16,13 @@ iOS : Minimum API level → iOS 12.0/ iOS 13.0
 
 Target API level → iOS 17.0
 
-Same logic as Android.
-
 **APIs integration :**
 
 1. Mapping APIs → The team agreed to use **TomTom Multinet API** for maps
 
    Provides access to mapping data, including real-time traffic information, road networks, and speed limit data for the Real-time Speed Limit Notification System.
 
-2. Crash Detection APIs
+2. Crash Detection APIs → React-native-sensors library
 
    Provides algorithms or services for detecting crash-like events based on accelerometer data, facilitating the Crash Detection and Automated Emergency Response feature.
 
@@ -32,7 +30,20 @@ Same logic as Android.
 
    Facilitates sending notifications to users in real-time, such as crash alerts or speed limit notifications.
 
-4. Voice Recognition APIs → React Native TTS library (or) Expo Speech library Enables voice-controlled notifications and hands-free operation by converting spoken commands into text for processing.
+4. Voice Recognition APIs → React Native TTS library (or) Expo Speech library 
+   
+   Enables voice-controlled notifications and hands-free operation by converting spoken commands into text for processing.
+
+Future Scope:
+
+5. Heart Rate Monitoring API → Fitbit API, Apple HealthKit 
+
+   Integrates with wearable devices or smartphone sensors to monitor the driver's heart rate, which can be used as an indicator of fatigue or stress levels for Comprehensive Driving Condition Monitoring.
+5. Weather API → OpenWeatherMap API, WeatherAPI.com
+
+   Offers weather data such as temperature, visibility, and current conditions, which can be used for Comprehensive Driving Condition Monitoring.
+
+
 
 **Sensors used:**
 
@@ -43,18 +54,31 @@ Same logic as Android.
 1. Gyroscope: Enhances accelerometer readings for precise motion tracking
 1. Microphone: Enables hands-free operation, reducing driver distraction and promoting safer driving habits.
 
+Future Scope:
+
+5. Barometer( might be available only in some devices): Measures atmospheric pressure, potentially aiding in altitude detection for enhanced driving condition monitoring.
+5. Proximity Sensor: Detects device proximity, facilitating automatic activation of hands-free features when mounted in the vehicle, reducing driver distraction.
+
+
+
 **User Permissions :**
 
 - Location: Required for navigation and real time speed limit notifications
 - Microphone access: For recording audio → Required for Hands free operation and notification system
 - Notification: Required for displaying notifications to the user.
 - Storage:
-  - For storing data on user driving behaviors and providing recommendations.
-  - For saving settings and may be other preferences for improved user experience.
-  - Required For offline Functionality → Future Scope
-  - Required if weather, visibility and terrain data are cached or stored locally. Both of these features can be considered for future scope.
+   1. For storing data on user driving behaviors and providing recommendations.
+   2. For saving settings and may be other preferences for improved user experience.
+   3. Required For offline Functionality → Future Scope
+   4. Required if weather, visibility and terrain data are cached or stored locally. Both of these features can be considered for future scope.
+   
+   
 - Contacts/ Emergency Contacts: Required for contacting in case of a crash.
 - Internet: For accessing Map API’s and for sending out notifications in case of crash
+
+Future Scope:
+
+- Bluetooth/ Wifi : To integrate with any bluetooth / IOT devices.
 
 **Data Storage**: Firestore by Firebase
 
@@ -78,8 +102,8 @@ Firestore offers real-time synchronization for instant updates, scalability to a
 
 1. Cross platform compatibility testing: The goal of this testing is to ensure consistent performance by identifying and resolving issues that might be specific to a device or operating system.
 1. Performance testing:
-   1. Ensure the app responds promptly to user interactions, minimizing delays in navigation and functionality.
-   1. Ensure the app is optimized to minimize resource consumption, avoiding excessive battery drain and device slowdowns
-1. Usability Testing
+- Ensure the app responds promptly to user interactions, minimizing delays in navigation and functionality.
+- Ensure the app is optimized to minimize resource consumption, avoiding excessive battery drain and device slowdowns
+3. Usability Testing
 - Identify any UI elements or design choices that may confuse or frustrate users, ensuring a user-friendly interface.
 - Ensure the app provides clear error messages and guidance for users
