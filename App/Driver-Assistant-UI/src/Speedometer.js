@@ -44,12 +44,16 @@ const Speedometer = () => {
   // ]
   
   // NOTE: format = 'long,lat'
-  const coordinates = [
-    '-111.932285,33.422002', // University Dr
-    '-111.932285,33.422002'
-  ]
+  // const coordinates = [
+  //   '-111.932285,33.422002', // University Dr
+  //   '-111.932285,33.422002'
+  // ]
+  const latitude = '33.422002';
+  const longitude = '-111.932285';
+  const location_template = `${longitude},${latitude}`;
+  const coordinates_parameter = Array(2).fill(location_template).join(';');
   
-  const apiUrl = `https://api.tomtom.com/snap-to-roads/1/snap-to-roads?points=${coordinates.join(';')}&fields={route{type,geometry{type,coordinates},properties{id,speedRestrictions{maximumSpeed{value,unit}}}}}&key=${apiKey}`
+  const apiUrl = `https://api.tomtom.com/snap-to-roads/1/snap-to-roads?points=${coordinates_parameter}&fields={route{type,geometry{type,coordinates},properties{id,speedRestrictions{maximumSpeed{value,unit}}}}}&key=${apiKey}`
   const getSpeedLimit = () => {
     axios.get(apiUrl)
       .then(res => {
