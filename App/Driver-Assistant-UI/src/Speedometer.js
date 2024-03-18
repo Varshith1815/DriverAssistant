@@ -38,16 +38,7 @@ const Speedometer = () => {
   const speedColor = speed < 30 ? '#30b455' : speed < 70 ? '#e3b23c' : '#d9534f';
 
   const apiKey = 'c63IvblzdGjwYAe8HLcEbunVMGIi5LGr';
-  // const coordinates = [
-  //   '-73.9856644,40.7484405',
-  //   '-74.00029,40.76254'
-  // ]
   
-  // NOTE: format = 'long,lat'
-  // const coordinates = [
-  //   '-111.932285,33.422002', // University Dr
-  //   '-111.932285,33.422002'
-  // ]
   const latitude = '33.422002';
   const longitude = '-111.932285';
   const location_template = `${longitude},${latitude}`;
