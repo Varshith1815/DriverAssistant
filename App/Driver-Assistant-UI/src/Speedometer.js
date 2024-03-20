@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Switch, TouchableOpacity  } from 'react-native';
 import * as Location from 'expo-location';
+import { LinearGradient } from 'expo-linear-gradient';
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 
@@ -79,13 +80,11 @@ const Speedometer = () => {
       // Skip the API call if heading is -1, not enough time has passed, or the user hasn't moved significantly
       return;
     }
-    console.log("in get speed");
 
     try {
       const projectedCoords = projectPoint(coords.latitude, coords.longitude, 500, heading); // 500 meters ahead based on current heading
       const coordinatesParameter = `${coords.longitude},${coords.latitude};${projectedCoords.longitude},${projectedCoords.latitude}`;
-      const headingsParameter = `${heading};${heading}`
-      console.log("coordinatesParameter", coordinatesParameter);
+      const headingsParameter = `${heading};${heading}`;
 
       const apiUrl = `https://api.tomtom.com/snap-to-roads/1/snap-to-roads?points=${coordinatesParameter}&headings=${headingsParameter}&fields={route{type,geometry{type,coordinates},properties{id,speedRestrictions{maximumSpeed{value,unit}}}}}&key=${API_KEY}`;
       const response = await axios.get(apiUrl);
@@ -128,7 +127,6 @@ const Speedometer = () => {
           const currentSpeedKmh = speed * 3.6;
           setSpeedKmh(currentSpeedKmh >= 0 ? currentSpeedKmh : 0);
           if (heading !== -1) { // Make sure heading is valid
-            console.log("in if")
             getSpeedLimit({ latitude, longitude }, heading);
           }
         }
@@ -160,6 +158,12 @@ const Speedometer = () => {
   });
 
   return (
+    <LinearGradient
+      colors={["#0f0c29", "#0f0c29", "#121212"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      style={styles.linearGradient}
+    >
     <View style={styles.container}>
       <View style={styles.speedDisplay}>
         <AntDesign
@@ -194,6 +198,7 @@ const Speedometer = () => {
         style={[styles.speedLimitText, { color: speedColor }]}
       >{`Limit: ${limit.toFixed(1)} ${useMph ? "mph" : "km/h"}`}</Text>
     </View>
+    </LinearGradient>
   );
 };
 
@@ -241,6 +246,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     width: '80%',
     // backgroundColor: '#fff'
+  },
+  linearGradient: {
+    flex: 1,
+    // borderRadius: 5,
   },
 });
 
