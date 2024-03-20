@@ -39,6 +39,7 @@ const Login = ({ onLogin }) => {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
       <ImageBackground source={require('../assets/Designer.png')} style={styles.backgroundImage}>
+      <Image source={require('../assets/AppLogo.jpg')} style={styles.logo} />
         <View style={styles.inputContainer}>
           {/* <KeyboardAvoidingView behavior="padding"> */}
             <TextInput value={email} style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)} />
@@ -71,14 +72,14 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover', // Cover the entire container
+    resizeMode: 'cover', 
   },
   inputContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent white background
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', 
     padding: 20,
     borderRadius: 10,
     elevation: 5,
-    marginTop: '30%', // Position the input container in the middle of the screen
+    marginTop: '30%', 
     marginHorizontal: 20,
   },
   input: {
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: '#f5f5f5', // Light gray input background
+    backgroundColor: '#f5f5f5', 
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -95,12 +96,18 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: '#007bff', // Blue button color
+    backgroundColor: '#007bff',
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 30,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logo: {
+    width: 140,
+    height: 140,
+    alignSelf: 'center',
+    marginTop: 100,
   },
   buttonText: {
     color: '#fff',
