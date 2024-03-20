@@ -37,16 +37,27 @@ const Login = ({ onLogin }) => {
     }
 
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled >
       <ImageBackground source={require('../assets/Designer.png')} style={styles.backgroundImage}>
       <Image source={require('../assets/AppLogo.jpg')} style={styles.logo} />
         <View style={styles.inputContainer}>
-          {/* <KeyboardAvoidingView behavior="padding"> */}
-            <TextInput value={email} style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)} />
-            <TextInput secureTextEntry={true} value={password} style={styles.input} placeholder="Password" autoCapitalize="none" onChangeText={(text) => setPassword(text)} />
+          {/* <KeyboardAvoidingView behavior="padding" enabled> */}
+            <TextInput 
+            value={email} 
+            style={styles.input} 
+            placeholder="Email" 
+            autoCapitalize="none" 
+            onChangeText={(text) => setEmail(text)} />
+            <TextInput 
+            secureTextEntry={true}
+             value={password} 
+             style={styles.input} 
+             placeholder="Password" 
+             autoCapitalize="none" 
+             onChangeText={(text) => setPassword(text)} />
 
             {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator}/>
             ) : (
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={signIn}>
@@ -79,7 +90,8 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     elevation: 5,
-    marginTop: '30%', 
+    marginTop: 'auto', 
+    marginBottom: 'auto', 
     marginHorizontal: 20,
   },
   input: {
@@ -107,7 +119,7 @@ const styles = StyleSheet.create({
     width: 140,
     height: 140,
     alignSelf: 'center',
-    marginTop: 100,
+   // marginTop: 100,
   },
   buttonText: {
     color: '#fff',
