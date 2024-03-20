@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, ActivityIndicator, KeyboardAvoidingView,ImageBackground } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 
@@ -37,8 +37,10 @@ const Login = ({ onLogin }) => {
     }
 
     return (
-        <View style={styles.container}>
-          <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <ImageBackground source={require('../assets/login-home.jpg')} style={styles.backgroundImage}>
+        <View style={styles.inputContainer}>
+          {/* <KeyboardAvoidingView behavior="padding"> */}
             <TextInput value={email} style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)} />
             <TextInput secureTextEntry={true} value={password} style={styles.input} placeholder="Password" autoCapitalize="none" onChangeText={(text) => setPassword(text)} />
 
@@ -54,8 +56,10 @@ const Login = ({ onLogin }) => {
                     </TouchableOpacity>
                 </View>
             )}
-          </KeyboardAvoidingView>
+          {/* </KeyboardAvoidingView> */}
         </View>
+        </ImageBackground>
+    </KeyboardAvoidingView>
     );
 };
 
