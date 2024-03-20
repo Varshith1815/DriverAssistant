@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, ActivityIndicator, KeyboardAvoidingView,ImageBackground } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, ActivityIndicator, KeyboardAvoidingView,ImageBackground, Image } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 
@@ -38,7 +38,7 @@ const Login = ({ onLogin }) => {
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <ImageBackground source={require('../assets/login-home.jpg')} style={styles.backgroundImage}>
+      <ImageBackground source={require('../assets/Designer.png')} style={styles.backgroundImage}>
         <View style={styles.inputContainer}>
           {/* <KeyboardAvoidingView behavior="padding"> */}
             <TextInput value={email} style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)} />
@@ -66,33 +66,48 @@ const Login = ({ onLogin }) => {
 export default Login;
 
 const styles = StyleSheet.create({
-    container: {
-        marginHorizontal: 40,
-        flex: 1,
-        justifyContent: 'center'
-    },
-    input: {
-        marginVertical: 4,
-        height: 50,
-        borderWidth: 1,
-        borderRadius: 14,
-        padding: 10,
-        backgroundColor: '#fff'
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10,
-    },
-    button: {
-        backgroundColor: '#007bff',
-        borderRadius: 14,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-    },
-    buttonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
+  container: {
+    flex: 1,
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // Cover the entire container
+  },
+  inputContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent white background
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+    marginTop: '30%', // Position the input container in the middle of the screen
+    marginHorizontal: 20,
+  },
+  input: {
+    marginVertical: 10,
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#f5f5f5', // Light gray input background
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: '#007bff', // Blue button color
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  loadingIndicator: {
+    marginTop: 20,
+  },
 });
