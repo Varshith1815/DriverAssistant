@@ -56,7 +56,10 @@ const Speedometer = () => {
 
   const setMostFrequentSpeedLimit = (route) => {
     const speedLimitCounts = route.reduce((acc, item) => {
-      const speedValue = item.properties.speedRestrictions.maximumSpeed.value;
+      // if (!item.properties.speedRestrictions || !item.properties.speedRestrictions.maximumSpeed) {
+      //   return acc; // Skip this iteration by returning the accumulator unchanged
+      // }
+      const speedValue = item.properties.speedRestrictions.maximumSpeed?.value || 0;
       if (acc[speedValue]) {
         acc[speedValue] += 1;
       } else {
@@ -64,6 +67,13 @@ const Speedometer = () => {
       }
       return acc;
     }, {});
+
+    console.log("speedLimitCounts: ", speedLimitCounts)
+
+    if (Object.keys(speedLimitCounts).length === 0) {
+      setSpeedLimit(parseInt(0, 10));
+      return;
+    }
 
     const mostFrequentSpeedLimit = Object.keys(speedLimitCounts).reduce(
       (a, b) => (speedLimitCounts[a] > speedLimitCounts[b] ? a : b)
@@ -82,13 +92,19 @@ const Speedometer = () => {
     }
 
     try {
-      const projectedCoords = projectPoint(coords.latitude, coords.longitude, 500, heading); // 500 meters ahead based on current heading
+      const projectedCoords = projectPoint(coords.latitude, coords.longitude, 300, heading); // 300 meters ahead based on current heading
       const coordinatesParameter = `${coords.longitude},${coords.latitude};${projectedCoords.longitude},${projectedCoords.latitude}`;
       const headingsParameter = `${heading};${heading}`;
 
       const apiUrl = `https://api.tomtom.com/snap-to-roads/1/snap-to-roads?points=${coordinatesParameter}&headings=${headingsParameter}&fields={route{type,geometry{type,coordinates},properties{id,speedRestrictions{maximumSpeed{value,unit}}}}}&key=${API_KEY}`;
       const response = await axios.get(apiUrl);
-      console.log("response.data.route", response.data.route[0].properties.speedRestrictions);
+      // console.log("response.data.route0", response.data.route[0].properties.speedRestrictions);
+      // console.log("response.data.route1", response.data.route[1].properties.speedRestrictions);
+      // console.log("response.data.route2", response.data.route[2].properties.speedRestrictions);
+      // console.log("response.data.route3", response.data.route[3].properties.speedRestrictions);
+      // console.log("response.data.route4", response.data.route[4].properties.speedRestrictions);
+      // console.log("response.data.route5", response.data.route[5].properties.speedRestrictions);
+      // console.log("response.data.route6", response.data.route[6].properties.speedRestrictions);
       // response.data.route.forEach((item) => {
       //   console.log(item.properties.speedRestrictions.maximumSpeed.value);
       //   setSpeedLimit(item.properties.speedRestrictions.maximumSpeed.value);
@@ -164,40 +180,51 @@ const Speedometer = () => {
       end={{ x: 0, y: 1 }}
       style={styles.linearGradient}
     >
-    <View style={styles.container}>
-      <View style={styles.speedDisplay}>
-        <AntDesign
-          name={!limit? 'clockcircleo' : currentSpeed <= limit - threshold ? 'forward' : // Below speed limit minus threshold
-          currentSpeed >= limit + threshold ? 'rocket1' : // Above speed limit plus threshold
-          'checkcircle'}
-          size={42}
-          color={speedColor}
-        />
-        <Text
-          style={[
-            styles.speedText,
-            {
-              color: speedColor,
-              shadowColor: speedColor,
-              textShadowColor: speedColor,
-            },
-          ]}
-        >
-          {errorMsg || `${Math.round(currentSpeed)}`}
-        </Text>
-        <View style={styles.unitButtons}>
-          <TouchableOpacity onPress={() => setUseMph(true)}>
-            <Text style={unitSelectionStyle(useMph)}>mph</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setUseMph(false)}>
-            <Text style={unitSelectionStyle(!useMph)}>km/h</Text>
-          </TouchableOpacity>
+      <View style={styles.container}>
+        <View style={styles.speedDisplay}>
+          <AntDesign
+            name={
+              !limit
+                ? "clockcircleo"
+                : currentSpeed <= limit - threshold
+                ? "forward" // Below speed limit minus threshold
+                : currentSpeed >= limit + threshold
+                ? "rocket1" // Above speed limit plus threshold
+                : "checkcircle"
+            }
+            size={42}
+            color={speedColor}
+          />
+          <Text
+            style={[
+              styles.speedText,
+              {
+                color: speedColor,
+                shadowColor: speedColor,
+                textShadowColor: speedColor,
+              },
+            ]}
+          >
+            {errorMsg || `${Math.round(currentSpeed)}`}
+          </Text>
+          <View style={styles.unitButtons}>
+            <TouchableOpacity onPress={() => setUseMph(true)}>
+              <Text style={unitSelectionStyle(useMph)}>mph</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setUseMph(false)}>
+              <Text style={unitSelectionStyle(!useMph)}>km/h</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.speedLimitSign}>
+          <Text style={styles.signText}>SPEED</Text>
+          <Text style={styles.signText}>LIMIT</Text>
+          <Text
+            style={[styles.signLimitValue, { color: "black" }]}
+          >{`${limit === 0 ? '-' : Math.round(limit)}`}</Text>
+          {/* <Text>{`${useMph ? "mph" : "km/h"}`}</Text> */}
         </View>
       </View>
-      <Text
-        style={[styles.speedLimitText, { color: speedColor }]}
-      >{`Limit: ${limit.toFixed(1)} ${useMph ? "mph" : "km/h"}`}</Text>
-    </View>
     </LinearGradient>
   );
 };
@@ -246,6 +273,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     width: '80%',
     // backgroundColor: '#fff'
+  },
+  speedLimitSign: {
+    marginTop: '15%',
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: 'black',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  signText: {
+    fontSize: 18, // Adjust as needed
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  signLimitValue: {
+    fontSize: 44,
+    fontWeight: 'bold',
+    marginTop: 0,
   },
   linearGradient: {
     flex: 1,

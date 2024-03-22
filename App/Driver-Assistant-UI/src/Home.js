@@ -2,10 +2,9 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 import Speedometer from './Speedometer';
-// Import or define your Leaderboard and Settings components
 import Leaderboard from './Leaderboard';
 import Settings from './Settings';
 
@@ -25,26 +24,25 @@ const Home = () => {
             let iconName;
 
             if (route.name === "Speedometer") {
-              iconName = "dashboard";
+              iconName = "speedometer";
             } else if (route.name === "Leaderboard") {
-              iconName = "Trophy"; // Correct icon name if necessary
+              iconName = "trophy";
             } else if (route.name === "Settings") {
-              iconName = "setting";
+              iconName = "settings";
             }
 
-            // You can return any component that you like here!
-            return <AntDesign name={iconName} size={size} color={color} />;
+            return <Ionicons name={iconName} size={size} color={color} />;
           },
           headerStyle: {
             backgroundColor: "#16161D", // Header background color
           },
           headerTintColor: "white", // Header title and back button color
-          tabBarActiveTintColor: "white", // Moved here from tabBarOptions
-          tabBarInactiveTintColor: "gray", // Moved here from tabBarOptions
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "gray",
           tabBarStyle: [
             {
               display: "flex",
-              backgroundColor: "#16161D", // Moved here from tabBarOptions
+              backgroundColor: "#16161D",
             },
             null,
           ],

@@ -1,4 +1,3 @@
-// Leaderboard.js
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text, StyleSheet } from 'react-native';
