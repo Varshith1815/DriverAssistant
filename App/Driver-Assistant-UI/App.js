@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/Home';
-import Login from './src/Login'
+import Login from './src/Login';
 
 const Stack = createStackNavigator();
 
@@ -13,6 +13,9 @@ function App() {
     setIsLoggedIn(true);
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
 
   return (
     <NavigationContainer>
@@ -30,8 +33,13 @@ function App() {
           >
             {(props) => <Login {...props} onLogin={handleLogin} />}
           </Stack.Screen>
-          
         )}
+        <Stack.Screen
+          name="Settings"
+          options={{ title: 'Settings' }}
+        >
+          {(props) => <Settings {...props} onSignOut={handleLogout} />}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

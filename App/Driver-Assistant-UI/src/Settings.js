@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
-const Settings = () => {
+import { FIREBASE_AUTH } from '../firebaseConfig';
+import { signOut } from 'firebase/auth'; 
+const Settings = ({onSignOut}) => {
     const [isCrashDetectionEnabled, setIsCrashDetectionEnabled] = useState(false);
+    const auth = FIREBASE_AUTH;
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+          onSignOut();
+        } catch (error) {
+          console.error('Error signing out:', error);
+        }
+      };
 
     return (
         <View style={styles.container}>
@@ -35,7 +45,7 @@ const Settings = () => {
                 />
             </View>
 
-            <TouchableOpacity style={styles.logoutButton}>
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                 <Ionicons name="log-out" size={24} color="black" style={styles.icon} />
                 <Text style={styles.logoutButtonText}>Logout</Text>
             </TouchableOpacity>
