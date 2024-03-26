@@ -13,6 +13,10 @@ const Tab = createBottomTabNavigator();
 const Home = ({onSignOut}) => {
   const [isCrashDetectionEnabled, setIsCrashDetectionEnabled] = useState(false);
 
+  const handleSignOut = () => {
+     onSignOut();
+  };
+
   return (
     <LinearGradient
       colors={["#0f0c29", "#0f0c29", "#121212"]}
@@ -52,7 +56,8 @@ const Home = ({onSignOut}) => {
       >
         <Tab.Screen name="Speedometer" component={Speedometer} />
         <Tab.Screen name="Leaderboard" component={Leaderboard} />
-        <Tab.Screen name="Settings" component={Settings}>
+        <Tab.Screen name="Settings">
+          {props => <Settings {...props} onSignOut={handleSignOut} />}
         </Tab.Screen>
       </Tab.Navigator>
     </LinearGradient>
