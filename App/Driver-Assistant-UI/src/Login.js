@@ -41,7 +41,6 @@ const Login = ({ onLogin }) => {
       <ImageBackground source={require('../assets/Designer.png')} style={styles.backgroundImage}>
       <Image source={require('../assets/AppLogo.jpg')} style={styles.logo} />
         <View style={styles.inputContainer}>
-          {/* <KeyboardAvoidingView behavior="padding" enabled> */}
             <TextInput 
             value={email} 
             style={styles.input} 
@@ -68,7 +67,6 @@ const Login = ({ onLogin }) => {
                     </TouchableOpacity>
                 </View>
             )}
-          {/* </KeyboardAvoidingView> */}
         </View>
         </ImageBackground>
     </KeyboardAvoidingView>
@@ -116,10 +114,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    width: 140,
-    height: 140,
+    width: 175,
+    height: 175,
     alignSelf: 'center',
-   // marginTop: 100,
+   marginTop: 100,
   },
   buttonText: {
     color: '#fff',

@@ -40,9 +40,9 @@ const Home = ({onSignOut}) => {
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           headerStyle: {
-            backgroundColor: "#16161D", // Header background color
+            backgroundColor: "#16161D",
           },
-          headerTintColor: "white", // Header title and back button color
+          headerTintColor: "white",
           tabBarActiveTintColor: "white",
           tabBarInactiveTintColor: "gray",
           tabBarStyle: [

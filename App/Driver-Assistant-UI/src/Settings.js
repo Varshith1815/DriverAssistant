@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 10,
         paddingHorizontal: 20,
-        backgroundColor: 'white', // Added white background for consistency
+        backgroundColor: 'white',
     },
     itemText: {
         flex: 1,
@@ -78,10 +78,10 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     icon: {
-        width: 30, // Adjust the width if necessary
+        width: 30,
     },
     iconRight: {
-        marginLeft: 'auto', // Pushes the icon to the right side
+        marginLeft: 'auto',
     },
     logoutButton: {
         flexDirection: 'row',
@@ -89,14 +89,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        backgroundColor: 'red', // Set background color to red
-        borderRadius: 4, // Optional: if you want rounded corners
-        marginHorizontal: 50, // Adjust as needed for spacing
-        marginTop: 10, // Adjust as needed for spacing
+        backgroundColor: 'red',
+        borderRadius: 4,
+        marginHorizontal: 50,
+        marginTop: 10,
     },
     logoutButtonText: {
         fontSize: 18,
-        color: 'black', // Set text color to black
+        color: 'black',
         marginLeft: 10,
     },
 });
