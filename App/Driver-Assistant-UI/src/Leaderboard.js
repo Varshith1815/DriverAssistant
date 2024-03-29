@@ -33,6 +33,23 @@ const TableComponent = () => {
 
     fetchData();
   }, []);
+
+  const renderItem = ({ item }) => (
+    <View style={styles.row}>
+      <Text style={styles.cell}>{item.email}</Text>
+      <Text style={styles.cell}>{item.number}</Text>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
