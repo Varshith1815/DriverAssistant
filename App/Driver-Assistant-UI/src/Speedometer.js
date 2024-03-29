@@ -160,10 +160,12 @@ const Speedometer = () => {
   const limit = useMph ? speedLimitMph : speedLimitKmh; // Use the appropriate speed limit based on the unit
 
   // Determine the speed color based on how the current speed compares to the speed limit (with threshold)
-  const threshold = 5; // Threshold for speed limit comparison
-  const speedColor = !limit? '#fff' : currentSpeed <= limit - threshold ? '#30b455' : // Below speed limit minus threshold
-                    currentSpeed >= limit + threshold ? '#d9534f' : // Above speed limit plus threshold
-                    '#e3b23c'; // Within threshold
+  const threshold = 10; // Threshold for speed limit comparison
+  const speedColor = !limit ? '#fff' :
+                      currentSpeed <= limit - threshold ? '#0000ff' : // Below speed limit minus 10, show blue
+                      currentSpeed <= limit ? '#30b455' : // Below speed limit, show green
+                      currentSpeed >= limit + threshold ? '#d9534f' : // Above speed limit plus threshold, show red
+                      '#e3b23c'; // Within threshold, show yellow
 
   const unitSelectionStyle = (isSelected) => ({
     opacity: isSelected ? 1 : 0.5,
