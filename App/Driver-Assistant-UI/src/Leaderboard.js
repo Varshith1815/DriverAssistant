@@ -17,6 +17,23 @@ const Leaderboard = () => {
   );
 };
 
+const TableComponent = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const jsonData = await response.json();
+        setData(jsonData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
