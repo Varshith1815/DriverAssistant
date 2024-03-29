@@ -23,6 +23,7 @@ const TableComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const response = await fetch('data.json');
         const jsonData = await response.json();
         setData(jsonData);
       } catch (error) {
