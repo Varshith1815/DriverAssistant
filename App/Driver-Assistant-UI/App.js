@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/Home';
-import Login from './src/Login'
+import Login from './src/Login';
 
 const Stack = createStackNavigator();
 
@@ -13,6 +13,9 @@ function App() {
     setIsLoggedIn(true);
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
 
   return (
     <NavigationContainer>
@@ -20,17 +23,17 @@ function App() {
         {isLoggedIn ? (
           <Stack.Screen
             name="Home"
-            component={Home}
             options={{ title: 'Home', headerShown: false}}
-          />
+        >
+          {(props) => <Home {...props} onSignOut={handleLogout} />}
+          </Stack.Screen>
         ) : (
           <Stack.Screen
             name="Login"
-            options={{ title: 'Login' }}
+            options={{ title: 'Login', headerShown: false}}
           >
             {(props) => <Login {...props} onLogin={handleLogin} />}
           </Stack.Screen>
-          
         )}
       </Stack.Navigator>
     </NavigationContainer>
