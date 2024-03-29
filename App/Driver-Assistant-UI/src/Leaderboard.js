@@ -55,17 +55,18 @@ const TableComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: '#121212',
+    padding: 16,
   },
-  text: {
-    color: 'white',
-    fontSize: 20,
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
-  linearGradient: {
+  cell: {
     flex: 1,
-    // borderRadius: 5,
+    textAlign: 'center',
   },
 });
 
