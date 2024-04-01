@@ -1,37 +1,13 @@
-import React from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
+import data from '../assets/data.json'; // Assuming data.json is in the assets folder
 
 const Leaderboard = () => {
-  return (
-    <LinearGradient
-      colors={["#0f0c29", "#0f0c29", "#121212"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 1 }}
-      style={styles.linearGradient}
-    >
-    <View style={styles.container}>
-      <Text style={styles.text}>Leaderboard Screen</Text>
-    </View>
-    </LinearGradient>
-  );
-};
-
-const TableComponent = () => {
-  const [data, setData] = useState([]);
+  const [leaderboardData, setLeaderboardData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('data.json');
-        const jsonData = await response.json();
-        setData(jsonData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
+    // Set the leaderboard data from the imported JSON file
+    setLeaderboardData(data);
   }, []);
 
   const renderItem = ({ item }) => (
@@ -43,19 +19,42 @@ const TableComponent = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      <View style={styles.tableBox}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>User</Text>
+          <Text style={styles.headerText}>Count</Text>
+        </View>
+        <FlatList
+          data={leaderboardData}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#0f0c29', 
     padding: 16,
+  },
+  tableBox: {
+    backgroundColor: '#333', 
+    borderRadius: 10,
+    padding: 12,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center', 
+  },
+  headerText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#fff',
+    textAlign: 'center', 
   },
   row: {
     flexDirection: 'row',
@@ -67,6 +66,7 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     textAlign: 'center',
+    color: '#fff', 
   },
 });
 
