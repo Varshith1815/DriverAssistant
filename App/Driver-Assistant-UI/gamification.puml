@@ -1,9 +1,7 @@
 @startuml
 
 start
-:Read userId from Session;
 :Read points from database;
-:Speed violation detected;
 :Get Speed Limit;
 
 if (Speed > Limit+5) then (Yes)
@@ -14,13 +12,15 @@ if (Speed > Limit+5) then (Yes)
 else (No)
 :Read good driving multiplier;
 repeat
-  :Start speed sensitive timer for 60s;
-  if (timer completed) then (Yes)
+  :Start speed senstive timer for 60s;
+  repeat
+  repeat while (Timer completed) is (No)
+  ->Yes;
   :Multiplier = Multiplier * 2;
-  endif
-repeat while (speed under limit) is (yes)
+repeat while (Speed under limit) is (yes)
 ->No;
 endif
+:Write points to database;
 stop
 
 @enduml
