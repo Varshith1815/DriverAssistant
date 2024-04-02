@@ -2,6 +2,7 @@
 
 start
 :Read points from database;
+:Wait till speed > 10mph;
 :Get Speed Limit;
 
 if (Speed > Limit+5) then (Yes)
@@ -10,15 +11,16 @@ if (Speed > Limit+5) then (Yes)
 :Deduct 5pts for every 30s;
 
 else (No)
-:Read good driving multiplier;
+:Initialize incrementer to 1;
 repeat
-  :Start speed senstive timer for 60s;
+  :Start speed senstive timer for 10s;
   repeat
   repeat while (Timer completed) is (No)
   ->Yes;
-  :Multiplier = Multiplier * 2;
+  :Multiply incrementer by 2;
 repeat while (Speed under limit) is (yes)
 ->No;
+:Increment points by incrementer;
 endif
 :Write points to database;
 stop
