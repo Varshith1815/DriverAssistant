@@ -122,15 +122,7 @@ const Speedometer = () => {
     }
   };
 
-  const overSpeedAlert = () => {
-    setIsOverSpeeding(true);
-    Speech.speak("You are overspeeding. Please slow down.");
-  };
-  const normalSpeedAlert = () => {
-    setIsOverSpeeding(false);
-    Speech.stop();
-  };
-  
+ 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -152,21 +144,29 @@ const Speedometer = () => {
           // let latitude = 33.41656574607349;
           // let longitude = -111.89151272680259;
           // let heading = 0;
-          const currentSpeedKmh = speed * 3.6;
+          // const currentSpeedKmh = speed * 3.6;
           setSpeedKmh(currentSpeedKmh >= 0 ? currentSpeedKmh : 0);
           if (heading !== -1) { // Make sure heading is valid
-            const limit = getSpeedLimit({ latitude, longitude }, heading);
-            const threshold = 5
-            if (currentSpeedKmh > limit + threshold && !isOverSpeeding) {
-              overSpeedAlert();
-            } else if (currentSpeedKmh <= speedLimit + threshold && isOverSpeeding) {
-              normalSpeedAlert();
-            }
+            getSpeedLimit({ latitude, longitude }, heading);
           }
+      
+          if(currentSpeed >= limit + threshold){
+            setIsOverSpeeding(true);
+          } else if(currentSpeed < limit + threshold){
+            setIsOverSpeeding(false);
+          }
+
         }
       );
     })();
-  }, [currentSpeedKmh, limit, isOverSpeeding]);
+  }, []);
+
+
+  useEffect(() => {
+    while(isOverSpeeding) {
+      Speech.speak("You are overspeeding. Please slow down.");
+    }
+  }, [isOverSpeeding]);
 
 
   const speedLimitMph = speedLimit; // Speed limit is initially in mph
@@ -176,8 +176,7 @@ const Speedometer = () => {
   const currentSpeedMph = speedKmh * 0.621371; // Convert speed to mph for comparison and display if useMph is true
 
   const currentSpeed = useMph ? currentSpeedMph: currentSpeedKmh; // Choose the current speed based on the unit selection
-  const limit = useMph ? speedLimitMph : speedLimitKmh; // Use the appropriate speed limit based on the unit
-
+  const limit = useMph ?  speedLimitMph : speedLimitKmh; // Use the appropriate speed limit based on the unit
 
   // Determine the speed color based on how the current speed compares to the speed limit (with threshold)
   const threshold = 10; // Threshold for speed limit comparison
@@ -187,6 +186,9 @@ const Speedometer = () => {
                       currentSpeed >= limit + threshold ? '#d9534f' : // Above speed limit plus threshold, show red
                       '#e3b23c'; // Within threshold, show yellow
 
+
+
+                                  
   const unitSelectionStyle = (isSelected) => ({
     opacity: isSelected ? 1 : 0.5,
     // color: isSelected ? speedColor : '#000',
@@ -194,6 +196,9 @@ const Speedometer = () => {
     paddingVertical: 2,
     fontSize: 30,
   });
+
+
+  
 
   return (
     <LinearGradient
