@@ -1,16 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { FIREBASE_AUTH } from '../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig';
 import { signOut, sendPasswordResetEmail } from 'firebase/auth';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 const Settings = ({onSignOut}) => {
     const [isCrashDetectionEnabled, setIsCrashDetectionEnabled] = useState(false);
     const [isProfileVisible, setIsProfileVisible] = useState(false);
-    // Placeholder for user data, replace with your state management logic
-    const userData = { email: 'user@example.com', username: 'User123', points: 1000 }; // Replace with actual user data
+    const [userFullName, setUserFullName] = useState('');
 
     const auth = FIREBASE_AUTH;
+    const db = FIREBASE_DB;
+
+    useEffect(() => {
+        if (auth.currentUser) {
+            const userRef = doc(db, "users", auth.currentUser.uid);
+
+            const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
+                if (docSnapshot.exists()) {
+                    const data = docSnapshot.data();
+                    setUserFullName(`${data.firstName} ${data.lastName}`);
+                    console.log(data.firstName+data.lastName)
+                } else {
+                    Alert.alert("No user data found " + auth.currentUser.uid);
+                    //console.log(auth.currentUser.uid); // Just for checks...remove later
+                }
+            }, (error) => {
+                console.error(error);
+                Alert.alert("Error fetching user data");
+            });
+
+            return () => unsubscribe();
+        }
+    }, [auth.currentUser]);
 
     const handleLogout = async () => {
         try {
@@ -23,7 +46,7 @@ const Settings = ({onSignOut}) => {
 
     const handlePasswordReset = async () => {
         try {
-            await sendPasswordResetEmail(auth, userData.email);
+            await sendPasswordResetEmail(auth, auth.currentUser.email);
             Alert.alert('Reset Email Sent', 'Please check your email to reset your password.');
         } catch (error) {
             console.error('Error sending password reset email:', error);
@@ -34,20 +57,16 @@ const Settings = ({onSignOut}) => {
         <View style={styles.container}>
             <Text style={styles.title}>Settings</Text>
 
-            <View style={styles.item}>
-                <Ionicons name="person-circle" size={24} color="black" style={styles.icon} />
-                <Text style={styles.itemText}>{userData.username || "User Name"}</Text>
-            </View>
-
             <TouchableOpacity style={styles.item} onPress={() => setIsProfileVisible(!isProfileVisible)}>
+                <Ionicons name="person-circle" size={24} color="white" style={styles.icon} />
                 <Text style={styles.itemText}>Profile</Text>
-                <Ionicons name={isProfileVisible ? "chevron-up" : "chevron-forward"} size={24} color="black" style={styles.iconRight} />
+                <Ionicons name={isProfileVisible ? "chevron-up" : "chevron-forward"} size={24} color="white" style={styles.iconRight} />
             </TouchableOpacity>
 
             {isProfileVisible && (
                 <View style={styles.dropdownContent}>
-                    <Text style={styles.dropdownText}>Username: {userData.username}</Text>
-                    <Text style={styles.dropdownText}>Points: {userData.points}</Text>
+                    <Text style={styles.dropdownText}>Full Name: {userFullName}</Text>
+                    {/* Display additional user data if needed */}
                     <TouchableOpacity onPress={() => {/* Navigate to Edit Profile logic here */}}>
                         <Text style={styles.dropdownLinkText}>Edit Details</Text>
                     </TouchableOpacity>
@@ -58,11 +77,13 @@ const Settings = ({onSignOut}) => {
             )}
 
             <TouchableOpacity style={styles.item}>
+                <Ionicons name="call" size={24} color="white" style={styles.icon} />
                 <Text style={styles.itemText}>Emergency Contact(s)</Text>
-                <Ionicons name="chevron-forward" size={24} color="black" style={styles.iconRight} />
+                <Ionicons name="chevron-forward" size={24} color="white" style={styles.iconRight} />
             </TouchableOpacity>
 
             <View style={styles.item}>
+                <Ionicons name="car" size={24} color="white" style={styles.icon} />
                 <Text style={styles.itemText}>Crash Detection</Text>
                 <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -85,36 +106,35 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 50,
-        backgroundColor: '#0f0c29', // Assuming a dark theme background color
+        backgroundColor: '#0f0c29',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
         alignSelf: 'center',
-        color: 'white', // Assuming white color for text to contrast with dark background
+        color: 'white',
     },
     item: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 10,
         paddingHorizontal: 20,
-        backgroundColor: '#212121', // Darker shade for item background
+        backgroundColor: '#212121',
         borderBottomWidth: 1,
-        borderBottomColor: '#414141', // Slightly lighter shade for the bottom border
+        borderBottomColor: '#414141',
     },
     itemText: {
         flex: 1,
         fontSize: 18,
         marginLeft: 10,
-        color: 'white', // White color for the text
+        color: 'white',
     },
     icon: {
-        width: 30,
-        color: 'white', // Assuming white color for icons
+        color: 'white',
     },
     iconRight: {
-        color: 'white', // White color for arrow icons
+        color: 'white',
     },
     logoutButton: {
         flexDirection: 'row',
@@ -126,27 +146,27 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         marginHorizontal: 50,
         marginTop: 10,
+        color: 'white',
     },
     logoutButtonText: {
         fontSize: 18,
-        color: 'white', // White color for the text on logout button
+        color: 'white',
         marginLeft: 10,
     },
     dropdownContent: {
-        backgroundColor: '#333', // Slightly lighter shade for dropdown content
+        backgroundColor: '#333',
         padding: 10,
         marginHorizontal: 20,
         borderRadius: 5,
-        borderBottomWidth: 0, // No bottom border for dropdown content
     },
     dropdownText: {
         fontSize: 16,
         marginVertical: 5,
-        color: 'white', // White color for dropdown text
+        color: 'white',
     },
     dropdownLinkText: {
         fontSize: 16,
-        color: '#1e90ff', // Highlight color for links (like a light blue)
+        color: '#1e90ff',
         marginVertical: 5,
     },
 });
