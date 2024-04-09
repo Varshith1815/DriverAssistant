@@ -2,38 +2,27 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, ActivityIndicator, KeyboardAvoidingView,ImageBackground, Image } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
+import { useNavigation } from '@react-navigation/native';
+
 
 const Login = ({ onLogin }) => { 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const auth = FIREBASE_AUTH;
+
+    const navigation = useNavigation();
 
     const signIn = async () => {
-        setLoading(true);
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            onLogin(); 
-        } catch (error) {
-            console.log(error);
-            alert('Sign in failed: ' + error.message);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    const signUp = async () => {
-        setLoading(true);
-        try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            onLogin(); 
-            alert('Please check your Inbox');
-        } catch (error) {
-            console.log(error);
-            alert('Sign up failed: ' + error.message);
-        } finally {
-            setLoading(false);
-        }
+      setLoading(true);
+      try {
+        await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+        onLogin(); 
+      } catch (error) {
+        console.log(error);
+        alert('Sign in failed: ' + error.message);
+      } finally {
+        setLoading(false);
+      }
     }
 
     return (
@@ -56,17 +45,17 @@ const Login = ({ onLogin }) => {
              onChangeText={(text) => setPassword(text)} />
 
             {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator}/>
-            ) : (
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={signIn}>
-                        <Text style={styles.buttonText}>Login</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={signUp}>
-                        <Text style={styles.buttonText}>Create Account</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
+                  <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator}/>
+              ) : (
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Signup')}>
+                          <Text style={styles.buttonText}>Create Account</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.button} onPress={signIn}>
+                          <Text style={styles.buttonText}>Login</Text>
+                      </TouchableOpacity>
+                  </View>
+              )}
         </View>
         </ImageBackground>
     </KeyboardAvoidingView>
