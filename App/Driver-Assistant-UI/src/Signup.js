@@ -45,7 +45,8 @@ const Signup = ({ onSignUpSuccess }) => {
                 email,
                 firstName,
                 lastName,
-                emergencyContacts: emergencyContacts.filter(contact => contact.name !== '')
+                emergencyContacts: emergencyContacts.filter(contact => contact.name !== ''),
+                points: 0,
             });
             onSignUpSuccess();
         } catch (error) {
