@@ -12,6 +12,8 @@ const Speedometer = () => {
   const [useMph, setUseMph] = useState(true);
   const [speedLimit, setSpeedLimit] = useState(0);
   const [isOverSpeeding, setIsOverSpeeding] = useState(false);
+  const wasOverSpeedingRef = useRef(false);
+  const overspeedingTimerRef = useRef(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const lastLocationRef = useRef(null);
   const lastCallTimeRef = useRef(0);
@@ -144,29 +146,55 @@ const Speedometer = () => {
           // let latitude = 33.41656574607349;
           // let longitude = -111.89151272680259;
           // let heading = 0;
-          // const currentSpeedKmh = speed * 3.6;
+          const currentSpeedKmh = speed * 3.6;
           setSpeedKmh(currentSpeedKmh >= 0 ? currentSpeedKmh : 0);
           if (heading !== -1) { // Make sure heading is valid
             getSpeedLimit({ latitude, longitude }, heading);
           }
-      
-          if(currentSpeed >= limit + threshold){
-            setIsOverSpeeding(true);
-          } else if(currentSpeed < limit + threshold){
-            setIsOverSpeeding(false);
-          }
-
+          // if(currentSpeed >= limit + threshold){
+          //   setIsOverSpeeding(true);
+          // } else if(currentSpeed < limit + threshold){
+          //   setIsOverSpeeding(false);
+          // }
         }
       );
     })();
   }, []);
 
+  useEffect(() => {
+    setIsOverSpeeding(currentSpeed >= limit + threshold);
+  }, [currentSpeed, limit, threshold]);
 
   useEffect(() => {
-    while(isOverSpeeding) {
-      Speech.speak("You are overspeeding. Please slow down.");
+    if (isOverSpeeding) {
+        if (!wasOverSpeedingRef.current) {
+            console.log("Overspeeding");
+            Speech.speak("You are overspeeding. Please slow down.");
+            wasOverSpeedingRef.current = true;
+        }
+
+        // Reset the timer every time this effect runs while overspeeding
+        if (overspeedingTimerRef.current) clearTimeout(overspeedingTimerRef.current);
+        overspeedingTimerRef.current = setTimeout(() => {
+            console.log("Still overspeeding");
+            Speech.speak("You are still overspeeding. Please slow down.");
+        }, 10000); // Check after 10 seconds
+
+    } else {
+        if (wasOverSpeedingRef.current) {
+            wasOverSpeedingRef.current = false;
+            Speech.stop();
+            if (overspeedingTimerRef.current) clearTimeout(overspeedingTimerRef.current); // Clear any running timeout
+        }
     }
-  }, [isOverSpeeding]);
+
+    // Clean up on unmount or when isOverSpeeding changes
+    return () => {
+        if (overspeedingTimerRef.current) {
+            clearTimeout(overspeedingTimerRef.current);
+        }
+    };
+}, [isOverSpeeding]);
 
 
   const speedLimitMph = speedLimit; // Speed limit is initially in mph
@@ -181,14 +209,12 @@ const Speedometer = () => {
   // Determine the speed color based on how the current speed compares to the speed limit (with threshold)
   const threshold = 10; // Threshold for speed limit comparison
   const speedColor = !limit ? '#fff' :
-                      currentSpeed <= limit - threshold ? '#0000ff' : // Below speed limit minus 10, show blue
+                      currentSpeed <= limit - threshold ? '#7DF9FF' : // Below speed limit minus 10, show blue
                       currentSpeed <= limit ? '#30b455' : // Below speed limit, show green
                       currentSpeed >= limit + threshold ? '#d9534f' : // Above speed limit plus threshold, show red
                       '#e3b23c'; // Within threshold, show yellow
 
-
-
-                                  
+                      
   const unitSelectionStyle = (isSelected) => ({
     opacity: isSelected ? 1 : 0.5,
     // color: isSelected ? speedColor : '#000',
@@ -197,8 +223,6 @@ const Speedometer = () => {
     fontSize: 30,
   });
 
-
-  
 
   return (
     <LinearGradient
