@@ -26,7 +26,8 @@ const Leaderboard = () => {
 
   const renderItem = ({ item }) => (
     <View style={styles.row}>
-
+    <Text style={styles.cell}>{item.firstName}</Text>
+    <Text style={styles.cell}>{item.points}</Text>
   </View>
   );
 
@@ -34,6 +35,8 @@ const Leaderboard = () => {
     <View style={styles.container}>
       <View style={styles.tableBox}>
         <View style={styles.header}>
+          <Text style={styles.headerText}>User</Text>
+          <Text style={styles.headerText}>Count</Text>
         </View>
         <FlatList
           data={usersData}
