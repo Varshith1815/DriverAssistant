@@ -27,7 +27,7 @@ const Leaderboard = () => {
   const renderItem = ({ item }) => (
     <View style={styles.row}>
     <Text style={styles.cell}>{item.firstName}</Text>
-    <Text style={styles.cell}>{item.points}</Text>
+    <Text style={styles.cell}>{item.points? item.points: '0'}</Text>
   </View>
   );
 
