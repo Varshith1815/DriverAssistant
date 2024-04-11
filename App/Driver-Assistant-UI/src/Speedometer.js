@@ -4,18 +4,23 @@ import * as Location from 'expo-location';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
+import * as Speech from 'expo-speech';
 
 const Speedometer = () => {
   const [speedKmh, setSpeedKmh] = useState(0);
   // const [speedMph, setSpeedMph] = useState(0);
   const [useMph, setUseMph] = useState(true);
   const [speedLimit, setSpeedLimit] = useState(0);
+  const [isOverSpeeding, setIsOverSpeeding] = useState(false);
+  const wasOverSpeedingRef = useRef(false);
+  const overspeedingTimerRef = useRef(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const lastLocationRef = useRef(null);
   const lastCallTimeRef = useRef(0);
   const callInterval = 6000; // Minimum interval between API calls (6 seconds)
 
   const API_KEY = 'c63IvblzdGjwYAe8HLcEbunVMGIi5LGr';
+
 
   const projectPoint = (latitude, longitude, distance, heading) => {
     const degreesToRadians = Math.PI / 180;
@@ -118,7 +123,8 @@ const Speedometer = () => {
       console.log(error);
     }
   };
-  
+
+ 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -145,10 +151,51 @@ const Speedometer = () => {
           if (heading !== -1) { // Make sure heading is valid
             getSpeedLimit({ latitude, longitude }, heading);
           }
+          // if(currentSpeed >= limit + threshold){
+          //   setIsOverSpeeding(true);
+          // } else if(currentSpeed < limit + threshold){
+          //   setIsOverSpeeding(false);
+          // }
         }
       );
     })();
   }, []);
+
+  useEffect(() => {
+    setIsOverSpeeding(currentSpeed >= limit + threshold);
+  }, [currentSpeed, limit, threshold]);
+
+  useEffect(() => {
+    if (isOverSpeeding) {
+        if (!wasOverSpeedingRef.current) {
+            console.log("Overspeeding");
+            Speech.speak("You are overspeeding. Please slow down.");
+            wasOverSpeedingRef.current = true;
+        }
+
+        // Reset the timer every time this effect runs while overspeeding
+        if (overspeedingTimerRef.current) clearTimeout(overspeedingTimerRef.current);
+        overspeedingTimerRef.current = setTimeout(() => {
+            console.log("Still overspeeding");
+            Speech.speak("You are still overspeeding. Please slow down.");
+        }, 10000); // Check after 10 seconds
+
+    } else {
+        if (wasOverSpeedingRef.current) {
+            wasOverSpeedingRef.current = false;
+            Speech.stop();
+            if (overspeedingTimerRef.current) clearTimeout(overspeedingTimerRef.current); // Clear any running timeout
+        }
+    }
+
+    // Clean up on unmount or when isOverSpeeding changes
+    return () => {
+        if (overspeedingTimerRef.current) {
+            clearTimeout(overspeedingTimerRef.current);
+        }
+    };
+}, [isOverSpeeding]);
+
 
   const speedLimitMph = speedLimit; // Speed limit is initially in mph
   const speedLimitKmh = speedLimit * 1.60934; // Convert speed limit to km/h for comparison if needed
@@ -157,16 +204,17 @@ const Speedometer = () => {
   const currentSpeedMph = speedKmh * 0.621371; // Convert speed to mph for comparison and display if useMph is true
 
   const currentSpeed = useMph ? currentSpeedMph: currentSpeedKmh; // Choose the current speed based on the unit selection
-  const limit = useMph ? speedLimitMph : speedLimitKmh; // Use the appropriate speed limit based on the unit
+  const limit = useMph ?  speedLimitMph : speedLimitKmh; // Use the appropriate speed limit based on the unit
 
   // Determine the speed color based on how the current speed compares to the speed limit (with threshold)
   const threshold = 10; // Threshold for speed limit comparison
   const speedColor = !limit ? '#fff' :
-                      currentSpeed <= limit - threshold ? '#0000ff' : // Below speed limit minus 10, show blue
+                      currentSpeed <= limit - threshold ? '#7DF9FF' : // Below speed limit minus 10, show blue
                       currentSpeed <= limit ? '#30b455' : // Below speed limit, show green
                       currentSpeed >= limit + threshold ? '#d9534f' : // Above speed limit plus threshold, show red
                       '#e3b23c'; // Within threshold, show yellow
 
+                      
   const unitSelectionStyle = (isSelected) => ({
     opacity: isSelected ? 1 : 0.5,
     // color: isSelected ? speedColor : '#000',
@@ -174,6 +222,7 @@ const Speedometer = () => {
     paddingVertical: 2,
     fontSize: 30,
   });
+
 
   return (
     <LinearGradient
