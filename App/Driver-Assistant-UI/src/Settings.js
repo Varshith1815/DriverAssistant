@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Modal, TextInput, Button } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig';
-import { signOut, sendPasswordResetEmail } from 'firebase/auth';
-import { collection, query, where, getDocs, doc, onSnapshot } from 'firebase/firestore';
+import { signOut, sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
+import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
 
 const Settings = ({onSignOut}) => {
     const [isCrashDetectionEnabled, setIsCrashDetectionEnabled] = useState(false);
     const [isProfileVisible, setIsProfileVisible] = useState(false);
     const [userFullName, setUserFullName] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [userDocId, setUserDocId] = useState(null);
+
 
     const auth = FIREBASE_AUTH;
     const db = FIREBASE_DB;
@@ -22,9 +30,11 @@ const Settings = ({onSignOut}) => {
                 try {
                     const querySnapshot = await getDocs(q);
                     querySnapshot.forEach((doc) => {
-                        // doc.data() is never undefined for query doc snapshots
                         const data = doc.data();
                         setUserFullName(`${data.firstName} ${data.lastName}`);
+                        setFirstName(data.firstName);
+                        setLastName(data.lastName);
+                        setUserDocId(doc.id);
                     });
                 } catch (error) {
                     console.error(error);
@@ -36,21 +46,45 @@ const Settings = ({onSignOut}) => {
         fetchUserData();
     }, [auth.currentUser]);
 
+    const handleUpdateDetails = async () => {
+        if (userDocId) {
+            const userRef = doc(db, "users", userDocId);
+            try {
+                await updateDoc(userRef, {
+                    firstName: firstName,
+                    lastName: lastName
+                });
+                setUserFullName(`${firstName} ${lastName}`);
+                setModalVisible(false);
+            } catch (error) {
+                console.error(error);
+                Alert.alert("Error updating user data");
+            }
+        }
+    };
+
+    const handlePasswordChange = async () => {
+        const user = auth.currentUser;
+        const credential = EmailAuthProvider.credential(user.email, oldPassword);
+
+        reauthenticateWithCredential(user, credential).then(() => {
+            updatePassword(user, newPassword).then(() => {
+                Alert.alert("Success", "Password has been updated successfully.");
+                setPasswordModalVisible(false);
+            }).catch(error => {
+                Alert.alert("Error", error.message);
+            });
+        }).catch(error => {
+            Alert.alert("Error", "The old password is incorrect.");
+        });
+    };
+
     const handleLogout = async () => {
         try {
             await signOut(auth);
             onSignOut();
         } catch (error) {
             console.error('Error signing out:', error);
-        }
-    };
-
-    const handlePasswordReset = async () => {
-        try {
-            await sendPasswordResetEmail(auth, auth.currentUser.email);
-            Alert.alert('Reset Email Sent', 'Please check your email to reset your password.');
-        } catch (error) {
-            console.error('Error sending password reset email:', error);
         }
     };
 
@@ -64,15 +98,44 @@ const Settings = ({onSignOut}) => {
                 <Ionicons name={isProfileVisible ? "chevron-up" : "chevron-forward"} size={24} color="white" style={styles.iconRight} />
             </TouchableOpacity>
 
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={passwordModalVisible}
+                onRequestClose={() => setPasswordModalVisible(!passwordModalVisible)}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <TextInput
+                            style={styles.modalInput}
+                            placeholder="Old Password"
+                            secureTextEntry
+                            value={oldPassword}
+                            onChangeText={setOldPassword}
+                        />
+                        <TextInput
+                            style={styles.modalInput}
+                            placeholder="New Password"
+                            secureTextEntry
+                            value={newPassword}
+                            onChangeText={setNewPassword}
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Button title="Cancel" onPress={() => setPasswordModalVisible(false)} />
+                            <Button title="Change Password" onPress={handlePasswordChange} />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
             {isProfileVisible && (
                 <View style={styles.dropdownContent}>
                     <Text style={styles.dropdownText}>Full Name: {userFullName}</Text>
-                    {/* Display additional user data if needed */}
-                    <TouchableOpacity onPress={() => {/* Navigate to Edit Profile logic here */}}>
+                    <TouchableOpacity onPress={() => setModalVisible(true)}>
                         <Text style={styles.dropdownLinkText}>Edit Details</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handlePasswordReset}>
-                        <Text style={styles.dropdownLinkText}>Reset Password</Text>
+                    <TouchableOpacity onPress={() => setPasswordModalVisible(true)}>
+                        <Text style={styles.dropdownLinkText}>Change Password</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -99,6 +162,41 @@ const Settings = ({onSignOut}) => {
                 <Ionicons name="log-out" size={24} color="white" style={styles.icon} />
                 <Text style={styles.logoutButtonText}>Logout</Text>
             </TouchableOpacity>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <TextInput
+                            style={styles.modalText}
+                            placeholder="First Name"
+                            value={firstName}
+                            onChangeText={setFirstName}
+                        />
+                        <TextInput
+                            style={styles.modalText}
+                            placeholder="Last Name"
+                            value={lastName}
+                            onChangeText={setLastName}
+                        />
+                        <Button
+                            title="Apply"
+                            onPress={() => handleUpdateDetails()}
+                        />
+                        <Button
+                            title="Cancel"
+                            onPress={() => setModalVisible(!modalVisible)}
+                        />
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -137,6 +235,39 @@ const styles = StyleSheet.create({
     iconRight: {
         color: 'white',
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    modalInput: {
+        width: '100%',
+        padding: 10,
+        marginBottom: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
     logoutButton: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -170,6 +301,31 @@ const styles = StyleSheet.create({
         color: '#1e90ff',
         marginVertical: 5,
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    }
 });
 
 export default Settings;
