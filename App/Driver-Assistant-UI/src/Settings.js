@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert } from 'react-n
 import { Ionicons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig';
 import { signOut, sendPasswordResetEmail } from 'firebase/auth';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, onSnapshot } from 'firebase/firestore';
 
 const Settings = ({onSignOut}) => {
     const [isCrashDetectionEnabled, setIsCrashDetectionEnabled] = useState(false);
@@ -14,25 +14,26 @@ const Settings = ({onSignOut}) => {
     const db = FIREBASE_DB;
 
     useEffect(() => {
-        if (auth.currentUser) {
-            const userRef = doc(db, "users", auth.currentUser.uid);
+        const fetchUserData = async () => {
+            if (auth.currentUser) {
+                const usersRef = collection(db, "users");
+                const q = query(usersRef, where("uid", "==", auth.currentUser.uid));
 
-            const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
-                if (docSnapshot.exists()) {
-                    const data = docSnapshot.data();
-                    setUserFullName(`${data.firstName} ${data.lastName}`);
-                    console.log(data.firstName+data.lastName)
-                } else {
-                    Alert.alert("No user data found " + auth.currentUser.uid);
-                    //console.log(auth.currentUser.uid); // Just for checks...remove later
+                try {
+                    const querySnapshot = await getDocs(q);
+                    querySnapshot.forEach((doc) => {
+                        // doc.data() is never undefined for query doc snapshots
+                        const data = doc.data();
+                        setUserFullName(`${data.firstName} ${data.lastName}`);
+                    });
+                } catch (error) {
+                    console.error(error);
+                    Alert.alert("Error fetching user data");
                 }
-            }, (error) => {
-                console.error(error);
-                Alert.alert("Error fetching user data");
-            });
+            }
+        };
 
-            return () => unsubscribe();
-        }
+        fetchUserData();
     }, [auth.currentUser]);
 
     const handleLogout = async () => {
