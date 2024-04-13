@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import * as Speech from 'expo-speech';
+import GamificationManager from './GamificationManager';
 
 const Speedometer = () => {
   const [speedKmh, setSpeedKmh] = useState(0);
@@ -20,6 +21,8 @@ const Speedometer = () => {
   const callInterval = 6000; // Minimum interval between API calls (6 seconds)
 
   const API_KEY = 'c63IvblzdGjwYAe8HLcEbunVMGIi5LGr';
+
+  const gamification = new GamificationManager();
 
 
   const projectPoint = (latitude, longitude, distance, heading) => {
@@ -180,12 +183,18 @@ const Speedometer = () => {
             Speech.speak("You are still overspeeding. Please slow down.");
         }, 10000); // Check after 10 seconds
 
+        // Gamification start overspeeding
+        gamification.startOverSpeeding();
+
     } else {
         if (wasOverSpeedingRef.current) {
             wasOverSpeedingRef.current = false;
             Speech.stop();
             if (overspeedingTimerRef.current) clearTimeout(overspeedingTimerRef.current); // Clear any running timeout
         }
+
+        // Gamification stop overspeeding
+        gamification.stopOverSpeeding();
     }
 
     // Clean up on unmount or when isOverSpeeding changes
