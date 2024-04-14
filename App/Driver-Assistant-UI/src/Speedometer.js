@@ -194,7 +194,7 @@ const Speedometer = () => {
         }
 
         // Gamification stop overspeeding
-        gamification.stopOverSpeeding();
+        // gamification.stopOverSpeeding();
     }
 
     // Clean up on unmount or when isOverSpeeding changes
@@ -206,11 +206,11 @@ const Speedometer = () => {
 }, [isOverSpeeding]);
 
 
-  const speedLimitMph = speedLimit; // Speed limit is initially in mph
+  const speedLimitMph = 35; // Speed limit is initially in mph
   const speedLimitKmh = speedLimit * 1.60934; // Convert speed limit to km/h for comparison if needed
 
   const currentSpeedKmh = speedKmh; // Assuming speedKmh is your speed in km/h
-  const currentSpeedMph = speedKmh * 0.621371; // Convert speed to mph for comparison and display if useMph is true
+  const currentSpeedMph = 45; // Convert speed to mph for comparison and display if useMph is true
 
   const currentSpeed = useMph ? currentSpeedMph: currentSpeedKmh; // Choose the current speed based on the unit selection
   const limit = useMph ?  speedLimitMph : speedLimitKmh; // Use the appropriate speed limit based on the unit
