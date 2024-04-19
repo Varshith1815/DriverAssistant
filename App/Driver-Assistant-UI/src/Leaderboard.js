@@ -24,6 +24,13 @@ const Leaderboard = () => {
         return () => unsubscribe();
   }, []);
 
+  const renderItem = ({ item }) => (
+    <View style={styles.row}>
+    <Text style={styles.cell}>{item.firstName}</Text>
+    <Text style={styles.cell}>{item.points? item.points: '0'}</Text>
+  </View>
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.tableBox}>
@@ -31,6 +38,11 @@ const Leaderboard = () => {
           <Text style={styles.headerText}>User</Text>
           <Text style={styles.headerText}>Count</Text>
         </View>
+        <FlatList
+          data={usersData}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
     </View>
   );
