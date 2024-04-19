@@ -14,6 +14,7 @@ const Leaderboard = () => {
       querySnapshot.forEach((doc) => {
         users.push({ id: doc.id, ...doc.data() });
       });
+      users.sort((a, b) => b.points - a.points);
       setUsersData(users);
     }, (error) => {
       Alert.alert("Error fetching user data");
