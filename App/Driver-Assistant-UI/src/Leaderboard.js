@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import data from '../assets/data.json'; // Assuming data.json is in the assets folder
+import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig';
+import { doc, onSnapshot, collection } from 'firebase/firestore';
 
 const Leaderboard = () => {
-  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [usersData, setUsersData] = useState([]); 
+  const db = FIREBASE_DB;
+
 
   useEffect(() => {
-    // Set the leaderboard data from the imported JSON file
-    setLeaderboardData(data);
-  }, []);
+    const usersCollection = collection(db, "users"); 
+        const unsubscribe = onSnapshot(usersCollection, (querySnapshot) => {
+            const users = [];
+            querySnapshot.forEach((doc) => {
+                users.push({ id: doc.id, ...doc.data() });
+            });
+            setUsersData(users);
 
-  const renderItem = ({ item }) => (
-    <View style={styles.row}>
-      <Text style={styles.cell}>{item.email}</Text>
-      <Text style={styles.cell}>{item.number}</Text>
-    </View>
-  );
+        }, (error) => {
+            Alert.alert("Error fetching user data");
+        });
+
+        return () => unsubscribe();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -24,11 +31,6 @@ const Leaderboard = () => {
           <Text style={styles.headerText}>User</Text>
           <Text style={styles.headerText}>Count</Text>
         </View>
-        <FlatList
-          data={leaderboardData}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
       </View>
     </View>
   );
