@@ -37,7 +37,7 @@ const Leaderboard = () => {
   }, [currentUser]);
 
   const topThreeIcon = require('../assets/black-cat.png'); // Replace with your top 3 icon path
-  const otherIcon = require('../assets/blue-cat.png'); // Replace with other ranks icon path
+  const otherIcon = require('../assets/white-cat.png'); // Replace with other ranks icon path
 
   const renderItem = ({ item, index }) => {
     const isTopThree = index < 3;
@@ -73,6 +73,9 @@ const Leaderboard = () => {
   );
 };
 
+// const themeColor = '#7DF9FF';
+const themeColor = '#fff';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
   },
   cell: {
     textAlign: 'left',
-    color: '#7DF9FF',
+    color: themeColor,
     fontSize: 16,
     padding: 8,
   },
@@ -122,11 +125,11 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   topRow: {
-    backgroundColor: '#7DF9FF',
+    backgroundColor: themeColor,
   },
   otherRow: {
     borderWidth: 1,
-    borderColor: '#7DF9FF',
+    borderColor: themeColor,
   },
   topCellText: {
     fontWeight: 'bold',
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   currentRankBox: {
-    backgroundColor: '#7DF9FF', // Blue background
+    backgroundColor: themeColor,
     paddingTop: 12,
     paddingBottom: 12,
     width: '100%',
