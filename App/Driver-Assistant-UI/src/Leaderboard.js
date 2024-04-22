@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 8,
-    height: 50,
+    height: 'auto',
     marginBottom: 8,
     borderRadius: 6,
   },
