@@ -21,10 +21,46 @@ const Speedometer = () => {
   const lastCallTimeRef = useRef(0);
   const callInterval = 6000; // Minimum interval between API calls (6 seconds)
 
+  const [speedLimitMph, setSpeedLimitMph] = useState(speedLimit);
+  const [speedLimitKmh, setSpeedLimitKmh] = useState(speedLimit * 1.60934);
+  const [currentSpeedKmh, setCurrentSpeedKmh] = useState(speedKmh);
+  const [currentSpeedMph, setCurrentSpeedMph] = useState(speedKmh * 0.621371);
+  const [threshold, setThreshold] = useState(10);
+  const [limit, setLimit] = useState(useMph ? speedLimitMph : speedLimitKmh);
+  const [currentSpeed, setCurrentSpeed] = useState(useMph ? currentSpeedMph : currentSpeedKmh);
+  const [speedColor, setSpeedColor] = useState("#fff");
+
   const API_KEY = 'c63IvblzdGjwYAe8HLcEbunVMGIi5LGr';
 
   const gamification = new GamificationManager();
 
+  useEffect(() => {
+    setSpeedLimitMph(speedLimit);
+    setSpeedLimitKmh(speedLimit * 1.60934);
+  }, [speedLimit]);
+  
+  useEffect(() => {
+    setCurrentSpeedKmh(speedKmh);
+    setCurrentSpeedMph(speedKmh * 0.621371);
+  }, [speedKmh]);
+  
+  useEffect(() => {
+    setLimit(useMph ? speedLimitMph : speedLimitKmh);
+  }, [useMph, speedLimitMph, speedLimitKmh]);
+
+  useEffect(() => {
+    setCurrentSpeed(useMph ? currentSpeedMph : currentSpeedKmh);
+  }, [useMph, currentSpeedMph, currentSpeedKmh]);
+  
+  useEffect(() => {
+    setSpeedColor(() => {
+      if (!limit) return '#fff';
+      if (currentSpeed <= limit - threshold) return '#7DF9FF';
+      if (currentSpeed <= limit) return '#30b455';
+      if (currentSpeed >= limit + threshold) return '#d9534f';
+      return '#e3b23c';
+    });
+  }, [currentSpeed, limit, threshold]);
 
   const projectPoint = (latitude, longitude, distance, heading) => {
     const degreesToRadians = Math.PI / 180;
@@ -209,23 +245,23 @@ const Speedometer = () => {
   }, [isOverSpeeding, currentSpeedMph]);
 
 
-  const speedLimitMph = speedLimit; // Speed limit is initially in mph
-  const speedLimitKmh = speedLimit * 1.60934; // Convert speed limit to km/h for comparison if needed
+  // const speedLimitMph = speedLimit; // Speed limit is initially in mph
+  // const speedLimitKmh = speedLimit * 1.60934; // Convert speed limit to km/h for comparison if needed
 
-  const currentSpeedKmh = speedKmh; // Assuming speedKmh is your speed in km/h
-  const currentSpeedMph = speedKmh * 0.621371; // Convert speed to mph for comparison and display if useMph is true
-  // const currentSpeedMph = 45; // For Testing
+  // const currentSpeedKmh = speedKmh; // Assuming speedKmh is your speed in km/h
+  // const currentSpeedMph = speedKmh * 0.621371; // Convert speed to mph for comparison and display if useMph is true
+  // // const currentSpeedMph = 45; // For Testing
 
-  const currentSpeed = useMph ? currentSpeedMph: currentSpeedKmh; // Choose the current speed based on the unit selection
-  const limit = useMph ? speedLimitMph : speedLimitKmh; // Use the appropriate speed limit based on the unit
+  // const currentSpeed = useMph ? currentSpeedMph: currentSpeedKmh; // Choose the current speed based on the unit selection
+  // const limit = useMph ? speedLimitMph : speedLimitKmh; // Use the appropriate speed limit based on the unit
 
-  // Determine the speed color based on how the current speed compares to the speed limit (with threshold)
-  const threshold = 10; // Threshold for speed limit comparison
-  const speedColor = !limit ? '#fff' :
-                      currentSpeed <= limit - threshold ? '#7DF9FF' : // Below speed limit minus 10, show blue
-                      currentSpeed <= limit ? '#30b455' : // Below speed limit, show green
-                      currentSpeed >= limit + threshold ? '#d9534f' : // Above speed limit plus threshold, show red
-                      '#e3b23c'; // Within threshold, show yellow
+  // // Determine the speed color based on how the current speed compares to the speed limit (with threshold)
+  // const threshold = 10; // Threshold for speed limit comparison
+  // const speedColor = !limit ? '#fff' :
+  //                     currentSpeed <= limit - threshold ? '#7DF9FF' : // Below speed limit minus 10, show blue
+  //                     currentSpeed <= limit ? '#30b455' : // Below speed limit, show green
+  //                     currentSpeed >= limit + threshold ? '#d9534f' : // Above speed limit plus threshold, show red
+  //                     '#e3b23c'; // Within threshold, show yellow
 
   const unitSelectionStyle = (isSelected) => ({
     opacity: isSelected ? 1 : 0.5,
