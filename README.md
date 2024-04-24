@@ -31,8 +31,9 @@ This project is developed using Expo in React Native. It benefits from cross-pla
 ### Setting Up for Development
 
 1. Clone the repository to your local machine.
-2. Navigate to the project directory and run `npm install` to install dependencies.
-3. Start the development server by running `npx expo start`.
+2. Head to the following Directory using this command: `cd "...\SER517-GROUP26\App\Driver-Assistant-UI"`
+3. Navigate to the project directory and run `npm install` to install dependencies.
+4. Start the development server by running `npx expo start`.
 
 ## Contributing
 
