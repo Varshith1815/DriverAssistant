@@ -309,6 +309,7 @@ const Settings = ({ onSignOut }) => {
               secureTextEntry
               value={oldPassword}
               onChangeText={setOldPassword}
+              placeholderTextColor="#999"
             />
             <TextInput
               style={styles.modalInput}
@@ -316,6 +317,7 @@ const Settings = ({ onSignOut }) => {
               secureTextEntry
               value={newPassword}
               onChangeText={setNewPassword}
+              placeholderTextColor="#999"
             />
             {loadingPassword ? (
               <ActivityIndicator size="large" color="#fff" />
@@ -354,12 +356,14 @@ const Settings = ({ onSignOut }) => {
               placeholder="First Name"
               value={firstName}
               onChangeText={setFirstName}
+              placeholderTextColor="#999"
             />
             <TextInput
               style={styles.modalText}
               placeholder="Last Name"
               value={lastName}
               onChangeText={setLastName}
+              placeholderTextColor="#999"
             />
             {loadingUpdate ? (
               <ActivityIndicator size="large" color="#fff" />
@@ -475,7 +479,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#D70040",
     borderRadius: 4,
     marginHorizontal: 50,
-    margin: 20,
+    // margin: 30,
+    marginVertical: 30,
     color: "white",
   },
   logoutButtonText: {
