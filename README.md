@@ -39,6 +39,19 @@ This project is developed using Expo in React Native. It benefits from cross-pla
 
 Contributions to the project are welcome! Please fork the repository and submit a pull request with your changes.
 
+## App Screenshots
+### Login Page
+![login-page](Images/login-page.jpg)
+### Leaderboard View
+![leaderboard-page](Images/leaderboard-page.jpg)
+### Settings View
+![settings-page](Images/settings-page.jpg)
+### Speedometer View
+![speed-blue](Images/speed-blue.jpeg)
+![speed-green](Images/speed-green.jpeg)
+![speed-yellow](Images/speed-yellow.jpeg)
+![speed-red](Images/speed-red.jpeg)
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
