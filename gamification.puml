@@ -11,13 +11,13 @@ if (Speed > Limit+5) then (Yes)
 :Deduct 5pts for every 30s;
 
 else (No)
-:Initialize incrementer to 1;
+:Initialize incrementer to 0;
 repeat
   :Start speed senstive timer for 10s;
   repeat
   repeat while (Timer completed) is (No)
   ->Yes;
-  :Multiply incrementer by 2;
+  :Add incrementer by 2;
 repeat while (Speed under limit) is (yes)
 ->No;
 :Increment points by incrementer;
