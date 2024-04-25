@@ -27,8 +27,8 @@ const Login = ({ onLogin }) => {
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled >
-      <ImageBackground source={require('../assets/Designer.png')} style={styles.backgroundImage}>
-      <Image source={require('../assets/AppLogo.jpg')} style={styles.logo} />
+      <ImageBackground source={require('../assets/AppLogo.jpg')} style={styles.backgroundImage}>
+      {/*<Image source={require('../assets/AppLogo.jpg')} style={styles.logo} />*/}
         <View style={styles.inputContainer}>
             <TextInput 
             value={email} 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover', 
+    resizeMode: 'cover',  
   },
   inputContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.7)', 

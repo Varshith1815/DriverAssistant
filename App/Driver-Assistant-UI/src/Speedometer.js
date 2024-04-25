@@ -9,7 +9,6 @@ import GamificationManager from './GamificationManager';
 
 const Speedometer = () => {
   const [speedKmh, setSpeedKmh] = useState(0);
-  // const [speedMph, setSpeedMph] = useState(0);
   const [useMph, setUseMph] = useState(true);
   const [speedLimit, setSpeedLimit] = useState(0);
   const [isOverSpeeding, setIsOverSpeeding] = useState(false);
@@ -19,7 +18,7 @@ const Speedometer = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const lastLocationRef = useRef(null);
   const lastCallTimeRef = useRef(0);
-  const callInterval = 6000; // Minimum interval between API calls (6 seconds)
+  const callInterval = 6000;
 
   const [speedLimitMph, setSpeedLimitMph] = useState(speedLimit);
   const [speedLimitKmh, setSpeedLimitKmh] = useState(speedLimit * 1.60934);
@@ -67,7 +66,7 @@ const Speedometer = () => {
     const radiansToDegrees = 180 / Math.PI;
     const earthRadiusInMeters = 6378137;
     const distRatio = distance / earthRadiusInMeters;
-    const bearing = heading * degreesToRadians; // Convert heading to radians
+    const bearing = heading * degreesToRadians;
 
     const latRad = latitude * degreesToRadians;
     const lonRad = longitude * degreesToRadians;
@@ -83,7 +82,7 @@ const Speedometer = () => {
 
   const getDistance = (coords1, coords2) => {
     const degreesToRadians = Math.PI / 180;
-    const earthRadiusKm = 6371; // Radius of the Earth in kilometers
+    const earthRadiusKm = 6371; 
 
     const dLat = (coords2.latitude - coords1.latitude) * degreesToRadians;
     const dLon = (coords2.longitude - coords1.longitude) * degreesToRadians;
@@ -96,14 +95,11 @@ const Speedometer = () => {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     const distanceKm = earthRadiusKm * c;
 
-    return distanceKm * 1000; // Convert distance to meters and return
+    return distanceKm * 1000; 
   };
 
   const setMostFrequentSpeedLimit = (route) => {
     const speedLimitCounts = route.reduce((acc, item) => {
-      // if (!item.properties.speedRestrictions || !item.properties.speedRestrictions.maximumSpeed) {
-      //   return acc; // Skip this iteration by returning the accumulator unchanged
-      // }
       const speedValue = item.properties.speedRestrictions.maximumSpeed?.value || 0;
       if (acc[speedValue]) {
         acc[speedValue] += 1;
@@ -196,7 +192,6 @@ const Speedometer = () => {
   }, [currentSpeedMph, limit, threshold, isOverSpeeding]);
 
   useEffect(() => {
-    // Function to handle the cleanup of the timeout and potentially other resources
     const clearOverspeedingTimer = () => {
         if (overspeedingTimerRef.current) {
             clearTimeout(overspeedingTimerRef.current);
@@ -210,62 +205,35 @@ const Speedometer = () => {
             Speech.speak("You are overspeeding. Please slow down.");
             wasOverSpeedingRef.current = true;
             hasStartedDrivingRef.current = true;
-            // Transition to overspeeding state
-            gamification.stopGoodDrivingSession(); // Stop good driving session when overspeeding starts
+            gamification.stopGoodDrivingSession();
             gamification.startOverSpeeding();
         } else if (!hasStartedDrivingRef.current && limit !== 0 && currentSpeedMph > 10) {
-          // This is the initial start of driving without overspeeding when speed limit data is available and speed in mph > 10
           gamification.startOverSpeeding();
           hasStartedDrivingRef.current = true;
       }
 
-        // Set a timer to remind the user if they continue to overspeed
         clearOverspeedingTimer();
         overspeedingTimerRef.current = setTimeout(() => {
             console.log("Still overspeeding");
             Speech.speak("You are still overspeeding. Please slow down.");
-        }, 10000); // Check after 10 seconds
+        }, 10000);
     } else {
-        // Handling the case where overspeeding has stopped
         if (wasOverSpeedingRef.current) {
             wasOverSpeedingRef.current = false;
             Speech.stop();
             clearOverspeedingTimer();
-            gamification.stopOverSpeeding(); // Properly stop the overspeeding session
+            gamification.stopOverSpeeding();
             gamification.startGoodDrivingSession();
         } else if (!hasStartedDrivingRef.current && limit !== 0 && currentSpeedMph > 10) {
-          // This is the initial start of driving without overspeeding when speed limit data is available and speed in mph > 10
           gamification.startGoodDrivingSession();
           hasStartedDrivingRef.current = true;
       }
     }
 
-    // Cleanup on unmount or when isOverSpeeding changes
     return clearOverspeedingTimer;
   }, [isOverSpeeding, currentSpeedMph]);
-
-
-  // const speedLimitMph = speedLimit; // Speed limit is initially in mph
-  // const speedLimitKmh = speedLimit * 1.60934; // Convert speed limit to km/h for comparison if needed
-
-  // const currentSpeedKmh = speedKmh; // Assuming speedKmh is your speed in km/h
-  // const currentSpeedMph = speedKmh * 0.621371; // Convert speed to mph for comparison and display if useMph is true
-  // // const currentSpeedMph = 45; // For Testing
-
-  // const currentSpeed = useMph ? currentSpeedMph: currentSpeedKmh; // Choose the current speed based on the unit selection
-  // const limit = useMph ? speedLimitMph : speedLimitKmh; // Use the appropriate speed limit based on the unit
-
-  // // Determine the speed color based on how the current speed compares to the speed limit (with threshold)
-  // const threshold = 10; // Threshold for speed limit comparison
-  // const speedColor = !limit ? '#fff' :
-  //                     currentSpeed <= limit - threshold ? '#7DF9FF' : // Below speed limit minus 10, show blue
-  //                     currentSpeed <= limit ? '#30b455' : // Below speed limit, show green
-  //                     currentSpeed >= limit + threshold ? '#d9534f' : // Above speed limit plus threshold, show red
-  //                     '#e3b23c'; // Within threshold, show yellow
-
   const unitSelectionStyle = (isSelected) => ({
     opacity: isSelected ? 1 : 0.5,
-    // color: isSelected ? speedColor : '#000',
     color: speedColor,
     paddingVertical: 2,
     fontSize: 30,
@@ -286,9 +254,9 @@ const Speedometer = () => {
               !limit
                 ? "clockcircleo"
                 : currentSpeed <= limit - threshold
-                ? "forward" // Below speed limit minus threshold
+                ? "forward"
                 : currentSpeed >= limit + threshold
-                ? "rocket1" // Above speed limit plus threshold
+                ? "rocket1"
                 : "checkcircle"
             }
             size={42}
@@ -321,7 +289,6 @@ const Speedometer = () => {
           <Text
             style={[styles.signLimitValue, { color: "black" }]}
           >{`${limit === 0 ? '-' : Math.round(limit)}`}</Text>
-          {/* <Text>{`${useMph ? "mph" : "km/h"}`}</Text> */}
         </View>
       </View>
     </LinearGradient>
@@ -331,7 +298,6 @@ const Speedometer = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: 'auto',
@@ -344,14 +310,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   speedText: {
-    fontSize: 130, // Increased size for emphasis
+    fontSize: 130,
     fontWeight: 'bold',
     marginHorizontal: 14,
-    // iOS Shadow Properties for Glow
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
-    // Android Text Shadow Properties for Glow
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 5,
     elevation: 5,
@@ -362,16 +326,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   unitButtons: {
-    // Vertical layout for mph and km/h buttons
-    // fontSize: 44,
-    // alignItems: 'flex-start',
-    // justifyContent: 'center',
-    // Horizontal layout
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     width: '80%',
-    // backgroundColor: '#fff'
   },
   speedLimitSign: {
     marginTop: '15%',
@@ -385,7 +343,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   signText: {
-    fontSize: 18, // Adjust as needed
+    fontSize: 18,
     color: 'black',
     fontWeight: 'bold',
   },
@@ -396,7 +354,6 @@ const styles = StyleSheet.create({
   },
   linearGradient: {
     flex: 1,
-    // borderRadius: 5,
   },
 });
 
