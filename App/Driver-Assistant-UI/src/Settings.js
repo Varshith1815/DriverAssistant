@@ -322,16 +322,20 @@ const Settings = ({ onSignOut }) => {
             {loadingPassword ? (
               <ActivityIndicator size="large" color="#fff" />
             ) : (
-              <View style={styles.buttonContainer}>
-                <Button
-                  title="Cancel"
-                  onPress={() => setPasswordModalVisible(false)}
-                />
-                <Button
-                  title="Change Password"
-                  onPress={handlePasswordChange}
-                />
-              </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#007bff' }]}
+                onPress={() => setPasswordModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#007bff' }]}
+                onPress={handlePasswordChange}
+              >
+                <Text style={styles.buttonText}>Change Password</Text>
+              </TouchableOpacity>
+            </View>
             )}
           </View>
         </KeyboardAvoidingView>
@@ -368,13 +372,20 @@ const Settings = ({ onSignOut }) => {
             {loadingUpdate ? (
               <ActivityIndicator size="large" color="#fff" />
             ) : (
-              <View style={styles.buttonContainer}>
-                <Button
-                  title="Cancel"
-                  onPress={() => setModalVisible(!modalVisible)}
-                />
-                <Button title="Apply" onPress={() => handleUpdateDetails()} />
-              </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#007bff' }]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#007bff' }]}
+                onPress={() => handleUpdateDetails()}
+              >
+                <Text style={styles.buttonText}>Apply</Text>
+              </TouchableOpacity>
+            </View>
             )}
           </View>
         </KeyboardAvoidingView>
@@ -386,9 +397,7 @@ const Settings = ({ onSignOut }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingTop: 50,
     backgroundColor: "#0f0c29",
-    // backgroundColor: '#212121',
   },
   title: {
     fontSize: 24,
@@ -403,15 +412,11 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 0,
     paddingHorizontal: 25,
-    // backgroundColor: '#212121',
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#414141',
   },
   userDetails: {
     flexDirection: "column",
   },
   userName: {
-    // flex: 1,
     fontSize: 20,
     fontWeight: "bold",
     marginLeft: 10,
@@ -419,17 +424,12 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   userEmail: {
-    // flex: 1,
     fontSize: 14,
     marginLeft: 10,
     color: "white",
     margin: 3,
   },
   userIcon: {
-    // width: 48,
-    // height: 48,
-    // marginRight: 4,
-    // margin: 20,
   },
   itemTitle: {
     flexDirection: "row",
@@ -437,24 +437,18 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     paddingBottom: 8,
     paddingHorizontal: 30,
-    // backgroundColor: '#212121',
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#414141',
   },
   itemTitleText: {
     flex: 1,
     fontSize: 14,
-    // marginLeft: 10,
     color: "white",
     fontFamily: "Montserrat_400Regular",
-    // fontFamily: 'Mon'
   },
   item: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 30,
-    // backgroundColor: '#212121',
     borderBottomWidth: 1,
     borderBottomColor: "#414141",
   },
@@ -479,7 +473,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#D70040",
     borderRadius: 4,
     marginHorizontal: 50,
-    // margin: 30,
     marginVertical: 30,
     color: "white",
   },
